@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author COCO
  */
-class DetalleLiquidacion {
+public class DetalleLiquidacion {
     
     private int idDetalleLiquidacion;
     private String matricula;

@@ -71,6 +71,37 @@ public class ControladorObraSocial {
     
     }
     
+    public static int getIdObraSocial(String obra){
+        try {
+            String consultaSQL = "SELECT idobrasocial FROM obrasocial where nombre = '" +obra+"'";
+            int idobrasocial = 0;
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+           
+            /*
+            while(resultado.next()){
+            obra.setNombre(resultado.getString("nombre"));
+            obra.setDireccion(resultado.getString("direccion"));
+            obra.setTelefonos(resultado.getString("telefonos"));
+            obra.setFirma(resultado.getString("responsablecontrato"));
+            obra.setFechacontrato(resultado.getString("fechacontrato"));
+            }
+             */
+            while(resultado.next())
+                idobrasocial = resultado.getInt("idobrasocial");
+            
+            conexion.Cerrar_conexion();
+            return idobrasocial;
+            
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    
+    }
    
     
     public static void getObrasSociales(ArrayList<ObraSocial> obras){

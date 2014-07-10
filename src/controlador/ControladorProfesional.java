@@ -106,6 +106,38 @@ public class ControladorProfesional {
     
     }
     
+    public static void getProfesionales(ArrayList<Profesional> profesionales, String obrasocial){
+        
+        int idobrasocial = ControladorObraSocial.getIdObraSocial(obrasocial);
+        try {
+            String consultaSQL = "SELECT * FROM vistaprofesionales WHERE vistaprofesionales.matricula IN (SELECT robrasocial.matricula FROM robrasocial WHERE robrasocial.idrobrasocial = "+idobrasocial+")";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    Profesional profesional = new Profesional();
+                    profesional.setMatricula(resultado.getInt("matricula"));
+                    profesional.setNombre(resultado.getString("nombre"));
+                    profesional.setDireccion(resultado.getString("direccion"));
+                    profesional.setTelefonos(resultado.getString("telefonos"));
+                    profesional.setCbu(resultado.getString("cbu"));
+                    profesional.setBanco(resultado.getString("banco"));
+                    profesional.setLocalidad(resultado.getString("localidad"));
+                    profesionales.add(profesional);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
     public static void getProfesionalesBusqueda(ArrayList<Profesional> profesionales, String buscar){
                 
         try {
