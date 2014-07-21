@@ -20,6 +20,10 @@ public class ConceptoCuentaCorriente implements Comparable<ConceptoCuentaCorrien
     private int debe;
     private int haber;
     private float importe;
+    private int tipo;
+    private int idliquidacion;
+    private String nombreliquidacion;
+    private String idrecibo;
 
     /**
      * @return the id
@@ -138,6 +142,62 @@ public class ConceptoCuentaCorriente implements Comparable<ConceptoCuentaCorrien
         
         return fecha.compareTo(o.getFecha());
         
+    }
+
+    /**
+     * @return the tipo
+     */
+    public int getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @return the idrecibo
+     */
+    public String getIdrecibo() {
+        return idrecibo;
+    }
+
+    /**
+     * @param idrecibo the idrecibo to set
+     */
+    public void setIdrecibo(String idrecibo) {
+        this.idrecibo = idrecibo;
+    }
+
+    /**
+     * @return the nombreliquidacion
+     */
+    public String getNombreliquidacion() {
+        return nombreliquidacion;
+    }
+
+    /**
+     * @param nombreliquidacion the nombreliquidacion to set
+     */
+    public void setNombreliquidacion(String nombreliquidacion) {
+        this.nombreliquidacion = nombreliquidacion;
+    }
+
+    /**
+     * @return the idliquidacion
+     */
+    public int getIdliquidacion() {
+        return idliquidacion;
+    }
+
+    /**
+     * @param idliquidacion the idliquidacion to set
+     */
+    public void setIdliquidacion(int idliquidacion) {
+        this.idliquidacion = idliquidacion;
     }
 
     

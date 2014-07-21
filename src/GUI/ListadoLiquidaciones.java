@@ -5,16 +5,13 @@
 package GUI;
 
 import controlador.ControladorLiquidacion;
-import controlador.ControladorMaterial;
 import controlador.ControladorObraSocial;
-import controlador.ControladorProfesional;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -22,7 +19,6 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Liquidacion;
 import modelo.ObraSocial;
-import modelo.Profesional;
 import utilidades.Mensaje;
 
 /**

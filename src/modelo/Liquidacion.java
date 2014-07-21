@@ -17,6 +17,7 @@ public class Liquidacion {
     private String fechaRecibida;
     private String fechaPago;
     private String importe;
+    private String nombre;
     
     private ArrayList<DetalleLiquidacion> detalles;
 
@@ -102,6 +103,20 @@ public class Liquidacion {
      */
     public void setDetalles(ArrayList<DetalleLiquidacion> detalles) {
         this.detalles = detalles;
+    }
+
+    /**
+     * @return the nombre
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     
 }

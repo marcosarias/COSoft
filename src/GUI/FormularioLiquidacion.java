@@ -6,8 +6,8 @@
 
 package GUI;
 
-import controlador.ControladorFactura;
-import controlador.ControladorMaterial;
+import controlador.ControladorCuentaCorriente;
+import controlador.ControladorLiquidacion;
 import controlador.ControladorObraSocial;
 import controlador.ControladorProfesional;
 import java.util.ArrayList;
@@ -15,11 +15,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import modelo.ConceptoLiquidacion;
+import modelo.CuentaCuotas;
+import modelo.DetalleLiquidacion;
 import modelo.Liquidacion;
 import modelo.Material;
 import modelo.ObraSocial;
 import modelo.Profesional;
-import modelo.DetalleLiquidacion;
 import utilidades.Mensaje;
 
 /**
@@ -38,9 +40,10 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
    // DefaultComboBoxModel modeloProfesionales = new DefaultComboBoxModel();
     DefaultComboBoxModel modeloObrasSociales = new DefaultComboBoxModel();
     private ArrayList<ObraSocial> obras;
+    private int idLiquidacion;
     
     /**
-     * Creates new form FormularioCompraMaterial
+     * Creates new form FormularioLiquidacion
      */
     public FormularioLiquidacion() {
         initComponents();
@@ -53,29 +56,15 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
         
         llenarObrasSociales();
         
-       // llenarProfesionales();
-        
         llenarTodo();
         
-        //jTextField1.setText(String.valueOf(ControladorFactura.obtenerNroFactura()));
         
     }
-
-    /*
-    private void llenarProfesionales(String obrasocial){
     
-        profesionales = new ArrayList<>();
-        ControladorProfesional.getProfesionales(profesionales,obrasocial);
-        
-        for(Profesional profesional : profesionales){
-        
-            modeloColumnas.addElement(profesional.getNombre());
-        
-        }
     
-    }
-    */
-    
+    /**
+     * Llena el comboBox de las obras sociales cargadas en el sistema
+     */
      private void llenarObrasSociales(){
     
         modeloObrasSociales.addElement("");
@@ -109,6 +98,8 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         importeTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        nombreTextField1 = new javax.swing.JTextField();
         jLabelTitulo = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
@@ -168,34 +159,53 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
 
         jLabel3.setText("Fecha pago:");
 
+        importeTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importeTextFieldActionPerformed(evt);
+            }
+        });
+
         jLabel4.setText("Importe:");
+
+        jLabel5.setText("Nombre liquidación:");
+
+        nombreTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreTextField1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 17, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fechaPagoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(importeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fechaRecibidaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(obraSocialComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nombreTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(obraSocialComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(fechaPagoTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                                .addComponent(importeTextField)
+                                .addComponent(fechaRecibidaTextField)))))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fechaPagoTextField, fechaRecibidaTextField, importeTextField, obraSocialComboBox});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -208,19 +218,23 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(fechaRecibidaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(fechaPagoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fechaPagoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(importeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nombreTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {fechaPagoTextField, fechaRecibidaTextField, importeTextField, obraSocialComboBox});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {fechaRecibidaTextField, importeTextField, obraSocialComboBox});
 
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelTitulo.setText("Nueva Liquidación");
@@ -283,45 +297,93 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        //CALCULAR LIQUIDACIÓN
-      
-        //Verificar que todos los datos hayan sido completados
-        Float importe;
-        importe = null;
+        
         String fecharecibida = this.fechaRecibidaTextField.getText();
         String fechapago = this.fechaPagoTextField.getText();
         String importeString = this.importeTextField.getText();
+        String nombreString = this.nombreTextField1.getText();
+        
+        //Verificar que todos los datos hayan sido completados
         if (!importeString.isEmpty() && !fecharecibida.isEmpty() && !fechapago.isEmpty()){
+            
+            // Verificar importe total = suma de importes profesionales
+            Float importe;
             importe = Float.parseFloat(importeString);
-            //Verificar importe total = suma de importes profesionales
+            
             Float suma = 0f;
+            
             for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
                 Float importeprof = (Float) modelo.getValueAt(i, 1);
                 suma += importeprof;
         
             }
-            if (suma == importe){
+            if (java.lang.Float.compare(importe, suma)==0){
                 // Almacenar la liquidación y calcular
-                Liquidacion liquidacion = null;
+                Liquidacion liquidacion = new Liquidacion();
                 int idobrasocial = ControladorObraSocial.getIdObraSocial(obrasocial);
                 
                 liquidacion.setIdObraSocial(idobrasocial);
                 liquidacion.setFechaPago(fechapago);
                 liquidacion.setFechaRecibida(fecharecibida);
                 liquidacion.setImporte(importeString);
+                liquidacion.setNombre(nombreString);
                 
-                ArrayList<DetalleLiquidacion> detalles = null;
-                DetalleLiquidacion detalle;
+                ArrayList<DetalleLiquidacion> detalles = new ArrayList<>();
+                DetalleLiquidacion detalle = new DetalleLiquidacion();
+                
                 for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
-                    //COMPLETAR....
+               
                     Float importeprof = (Float) modelo.getValueAt(i, 1);
-                    suma += importeprof;
-        
+                    detalle.setAtributo(importeprof);
+                    String nombre = String.valueOf(jTable1.getComponentAt(i, 0));
+                    Profesional profesional = new Profesional();
+                    profesional.setNombre(nombre);
+                    
+                    ControladorProfesional.getDatosNombre(profesional);
+                    detalle.setMatricula(profesional.getMatricula());
+                    //detalle.setIdLiquidacion(idLiquidacion);
+                    // al importe restar la comisión del 10%
+                    importeprof-=importeprof*0.10f;
+                    //calcular conceptos que se restan e insertar con el iddetalle
+                     Boolean calculado = false;
+                     
+                     //obtener las cuotas que se le pueden restar a la liquidacion
+                     ArrayList<CuentaCuotas> cuentacuotas = null;
+                     ArrayList<ConceptoLiquidacion> conceptos = null;
+                     //cuentacuotas.setMatricula(profesional.getMatricula());
+                     ControladorCuentaCorriente.obtenerCuotasAdeudadasImporte(cuentacuotas, profesional.getMatricula(),importeprof);
+                     
+                     // ARREGLAR!!
+                     if (cuentacuotas!=null){
+                     while (importeprof!=0 && calculado!=true ){
+                         for (CuentaCuotas cuentacuota : cuentacuotas){
+                             if(cuentacuota.getImporte() < importeprof){
+                                 ConceptoLiquidacion concepto = new ConceptoLiquidacion();
+                                 concepto.setIdTipoCuota(concepto.getIdTipoCuota());
+                                 concepto.setImporte(cuentacuota.getImporte());
+                                 importeprof-=cuentacuota.getImporte();
+                                 
+                                 conceptos.add(concepto);
+                             }
+                         }
+                         calculado = true;
+                     }
+                     }
+                    detalle.setConceptos(conceptos);
+                    detalles.add(detalle);
                 }
+                
                 liquidacion.setDetalles(detalles);
                 
+                String resultado = ControladorLiquidacion.insertarLiquidacion(liquidacion);
                 
+                if(resultado.equals("")){  //No hubo error
+                    //TODO: Mostrar liquidación calculada
+                    //Mensaje.mostrarMensaje(rootPane, "Liquidacion calculada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else Mensaje.mostrarMensaje(rootPane, "Error al agregar intentar crear la liquidación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+            
+            dispose();
                 
             }
             else{
@@ -331,7 +393,7 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
         else{
             JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
         }
-        //Verificar importe total = suma de importes profesionales
+        
       
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -363,6 +425,14 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_fechaRecibidaTextFieldActionPerformed
 
+    private void importeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importeTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_importeTextFieldActionPerformed
+
+    private void nombreTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombreTextField1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField fechaPagoTextField;
     private javax.swing.JTextField fechaRecibidaTextField;
@@ -373,11 +443,13 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField nombreTextField1;
     private javax.swing.JComboBox obraSocialComboBox;
     // End of variables declaration//GEN-END:variables
 

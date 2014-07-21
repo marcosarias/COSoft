@@ -8,7 +8,7 @@ package modelo;
  *
  * @author COCO
  */
-class ConceptoLiquidacion {
+public class ConceptoLiquidacion {
     
     private int idConceptoLiquidacion;
     private int idDetalleLiquidacion;

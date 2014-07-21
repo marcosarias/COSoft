@@ -78,17 +78,7 @@ public class ControladorObraSocial {
             Conexion conexion = new Conexion();
             conexion.Conectar();
             ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
-            
-           
-            /*
-            while(resultado.next()){
-            obra.setNombre(resultado.getString("nombre"));
-            obra.setDireccion(resultado.getString("direccion"));
-            obra.setTelefonos(resultado.getString("telefonos"));
-            obra.setFirma(resultado.getString("responsablecontrato"));
-            obra.setFechacontrato(resultado.getString("fechacontrato"));
-            }
-             */
+          
             while(resultado.next())
                 idobrasocial = resultado.getInt("idobrasocial");
             

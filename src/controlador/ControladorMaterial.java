@@ -168,16 +168,24 @@ public class ControladorMaterial {
     
     }
     
-    public static String registrarCompraMaterial(ArrayList<Material> materiales, int matricula, int nroFactura) {
+    public static String registrarCompraMaterial(ArrayList<Material> materiales, int matricula, String nroFactura, String nroRecibo) {
         
         Calendar calendar = Calendar.getInstance();
         String fecha = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
         
-        String consultaSQL = "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (" + nroFactura + ", " + matricula + ", \"\", \"" + fecha + "\", " + calcularImporte(materiales) + ");";
+        float importe = calcularImporte(materiales);
+        String consultaSQL = "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ");";
         
+        if(!nroRecibo.equals("")){
+        
+            consultaSQL += "INSERT INTO recibo (nrecibo, matricula, detalle, fecha, importe, nfactura) VALUES (\"" + nroRecibo + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ", \"" + nroFactura + "\");";
+            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idrecibo) VALUES (" + matricula + ", 13, " + importe + ", " + fecha.split("-")[1] + ", " + fecha.split("-")[0] + ", \"" + nroRecibo + "\");";
+        }
+        else consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio) VALUES (" + matricula + ", 13, " + importe + ", " + fecha.split("-")[1] + ", " + fecha.split("-")[0] + ");";
+            
         for(Material material : materiales){
         
-            consultaSQL += "INSERT INTO ventamaterial (idmaterial, fecha, cantidad, facturaventa, matricula) VALUES (" + material.getIdMaterial() + ", \"" + fecha + "\", " + material.getCantidadCompra() + ", " + nroFactura + ", " + matricula + ");";
+            consultaSQL += "INSERT INTO ventamaterial (idmaterial, fecha, cantidad, facturaventa, matricula) VALUES (" + material.getIdMaterial() + ", \"" + fecha + "\", " + material.getCantidadCompra() + ", \"" + nroFactura + "\", " + matricula + ");";
             consultaSQL += "update material set stock = \"" + material.getStock() + "\" where idmaterial = " + material.getIdMaterial() + ";";
         
         }

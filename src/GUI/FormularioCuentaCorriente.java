@@ -87,6 +87,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -98,14 +100,14 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Fecha", "Detalle", "Debe", "Haber", "Saldo"
+                "Fecha", "Detalle", "Debe", "Haber"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -122,6 +124,10 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
 
         jButton2.setText("Cancelar");
 
+        jTextField1.setEditable(false);
+
+        jLabel2.setText("Saldo adeudado");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,19 +135,25 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(271, 271, 271)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(236, 236, 236)
-                        .addComponent(jButton1)
-                        .addGap(29, 29, 29)
-                        .addComponent(jButton2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(271, 271, 271)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jSeparator1)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(234, 234, 234)
+                                .addComponent(jButton1)
+                                .addGap(30, 30, 30)
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,11 +164,15 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(34, 34, 34))
+                .addContainerGap())
         );
 
         pack();
@@ -166,9 +182,11 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
     private void llenarTodo() {
@@ -183,11 +201,41 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         
         ControladorCuentaCorriente.obtenerCuotas(conceptos, id);
         
+        float saldo = 0;
+        
         for(ConceptoCuentaCorriente concepto : conceptos){
         
-            Object[] data = { concepto.getFecha(), concepto.getDetalle(), 0, concepto.getImporte(), 0 };
-            modelo.addRow(data);
-        
+            if(concepto.getIdliquidacion() == 0){
+            
+                if(concepto.getIdrecibo() == null){
+                    
+                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 };  //DEBE
+                    modelo.addRow(data);
+                    saldo += concepto.getImporte();
+                    
+                }
+                else{       //PAGO EFECTIVO, solo al comprar materiales
+                
+                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 };  //DEBE
+                    modelo.addRow(data);
+                    Object[] data2 = { "", "Recibo: " + concepto.getIdrecibo(), 0, concepto.getImporte() };  //HABER
+                    modelo.addRow(data2);
+                
+                }
+            
+            }
+            else{
+            
+                Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 };  //DEBE
+                modelo.addRow(data);
+                
+                Object[] data2 = { "", "Liquidación: " + concepto.getNombreliquidacion(), 0, concepto.getImporte() };  //HABER
+                modelo.addRow(data2);
+            
+            }
+            
+            jTextField1.setText(String.valueOf(saldo));
+            
         }
         
     }

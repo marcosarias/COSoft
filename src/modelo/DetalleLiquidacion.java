@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class DetalleLiquidacion {
     
     private int idDetalleLiquidacion;
-    private String matricula;
+    private int matricula;
     private int idLiquidacion;
     private float atributo;
     private String valor;
@@ -37,14 +37,14 @@ public class DetalleLiquidacion {
     /**
      * @return the matricula
      */
-    public String getMatricula() {
+    public int getMatricula() {
         return matricula;
     }
 
     /**
      * @param matricula the matricula to set
      */
-    public void setMatricula(String matricula) {
+    public void setMatricula(int matricula) {
         this.matricula = matricula;
     }
 

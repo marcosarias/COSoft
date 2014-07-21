@@ -75,6 +75,32 @@ public class ControladorProfesional {
     
     }
     
+    public static void getDatosNombre(Profesional profesional){
+        try {
+            String consultaSQL = "SELECT * FROM profesional where nombre = '" + profesional.getNombre() + "'";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    profesional.setMatricula(resultado.getInt("matricula"));
+                    profesional.setDireccion(resultado.getString("direccion"));
+                    profesional.setTelefonos(resultado.getString("telefonos"));
+                    profesional.setCbu(resultado.getString("cbu"));
+                    profesional.setBanco(resultado.getString("banco"));
+                    profesional.setIdlocalidad(resultado.getInt("localidad"));
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
     public static void getProfesionales(ArrayList<Profesional> profesionales){
                 
         try {
