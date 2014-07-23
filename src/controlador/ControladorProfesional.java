@@ -262,6 +262,32 @@ public class ControladorProfesional {
         return ids;
     
     }
+    
+    public static ArrayList<Integer> getObrasProfesional(int matricula){
+                
+        ArrayList<Integer> ids = new ArrayList<>();
+        try {
+            String consultaSQL = "SELECT * FROM robrasocial where matricula = " + matricula;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    ids.add(resultado.getInt("idrobrasocial"));
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return ids;
+    
+    }
 
     public static String actualizarCuotas(ArrayList<Integer> ids, int matricula) {
         
@@ -283,6 +309,24 @@ public class ControladorProfesional {
         
     }
 
- 
+    public static String actualizarObras(ArrayList<Integer> ids, int matricula) {
+        
+        String consultaSQL = "delete from robrasocial where matricula = " + matricula + ";";
+        
+        for(Integer idObra : ids){
+        
+            if(ids.contains(idObra))
+                consultaSQL += "INSERT INTO robrasocial (idrobrasocial, matricula) VALUES (" + idObra + ", " + matricula + ");";
+        
+        }
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+        
+    }
     
 }

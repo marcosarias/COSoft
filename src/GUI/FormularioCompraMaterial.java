@@ -123,7 +123,19 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
 
         jLabel2.setText("Nro Factura: ");
 
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
+        });
+
         jLabel3.setText("Nro Recibo: ");
+
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -273,6 +285,36 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private String darFormato(String s){
+    
+        String[] a = s.split("-");
+            
+        while(a[0].length() < 4)
+            a[0] = "0" + a[0];
+        
+        while(a[1].length() < 8)
+            a[1] = "0" + a[1];
+            
+        return a[0] + "-" + a[1];
+        
+    }
+    
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        // TODO add your handling code here:
+        String s = jTextField1.getText();
+        if(s.contains("-"))
+            jTextField1.setText(darFormato(s));
+        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de factura", "Error", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jTextField1FocusLost
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+        // TODO add your handling code here:
+        String s = jTextField2.getText();
+        if(s.contains("-"))
+            jTextField2.setText(darFormato(s));
+        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de recibo", "Error", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jTextField2FocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

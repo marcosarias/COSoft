@@ -1,35 +1,37 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package GUI;
 
+import controlador.ControladorObraSocial;
 import controlador.ControladorProfesional;
-import controlador.ControladorTipoCuota;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import modelo.TipoCuota;
+import modelo.ObraSocial;
 import utilidades.Mensaje;
 
 /**
  *
  * @author COCO
  */
-public class ListadoCuotasProfesional extends javax.swing.JDialog {
+public class ListadoObrasSocialesProfesional extends javax.swing.JDialog {
 
     int matricula;
     ArrayList<Integer> ids;
-    ArrayList<TipoCuota> tipoCuotas;
+    ArrayList<ObraSocial> obras;
     
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
     
     /**
-     * Creates new form ListadoCuotasProfesional
+     * Creates new form ListadoObrasSocialesProfesional
      */
-    public ListadoCuotasProfesional(int matricula) {
+    public ListadoObrasSocialesProfesional(int matricula) {
         initComponents();
         this.matricula = matricula;
         setModal(true);
@@ -42,26 +44,26 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
         llenarTodo();
         
     }
-
+    
     private void llenarTodo() {
                 
         ids = ControladorProfesional.getObrasProfesional(matricula);
-        tipoCuotas = new ArrayList<>();
-        ControladorTipoCuota.getTipos(tipoCuotas);
+        obras = new ArrayList<>();
+        ControladorObraSocial.getObrasSociales(obras);
         
-        for(TipoCuota tipo : tipoCuotas){
+        for(ObraSocial obra : obras){
         
             Boolean esta = false;
-            if(ids.contains(tipo.getIdCuota()))
+            if(ids.contains(obra.getIdObraSocial()))
                 esta = true;
             
-            Object[] data = { tipo.getNombre(), tipo.getFrecuencia(), tipo.getImporte(), esta };
+            Object[] data = { obra.getNombre(), esta };
             modelo.addRow(data);
         
         }
         
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,9 +75,9 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
         jLabelTitulo = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -85,14 +87,14 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Cuota", "Frecuencia", "Importe", "Paga"
+                "Obra Social", "Adherido"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, true
+                false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -104,6 +106,12 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+        }
+
+        jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabelTitulo.setText("Adhesiones");
 
         jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -111,9 +119,6 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabelTitulo.setText("Suscripciones");
 
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -127,19 +132,23 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(157, 157, 157)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabelTitulo)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)))
-                .addContainerGap(144, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                        .addGap(82, 82, 82)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jLabelTitulo)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,7 +158,7 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -161,17 +170,17 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
         ArrayList<Integer> idsNuevos = new ArrayList<>();
         for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
-        
-            Boolean esta = (Boolean) modelo.getValueAt(i, 3);
+
+            Boolean esta = (Boolean) modelo.getValueAt(i, 1);
             if(esta)
-                idsNuevos.add(tipoCuotas.get(i).getIdCuota());
-        
+                idsNuevos.add(obras.get(i).getIdObraSocial());
+
         }
-        
-        String resultado = ControladorProfesional.actualizarCuotas(idsNuevos, matricula);
+
+        String resultado = ControladorProfesional.actualizarObras(idsNuevos, matricula);
         if (resultado.equals("")) //No hubo error
         {
             Mensaje.mostrarMensaje(rootPane, "Operación realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
@@ -180,7 +189,7 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
         }
 
         dispose();
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

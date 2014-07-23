@@ -4,7 +4,7 @@
  */
 package odontoguachos;
 
-import GUI.MainFrame;
+import GUI.FormularioPrincipal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -22,7 +22,7 @@ public class Odontoguachos {
     public static void main(String[] args) {
                 
         setLookAndFeel();
-        MainFrame mf = new MainFrame();
+        FormularioPrincipal mf = new FormularioPrincipal();
         mf.requestFocus();
         mf.setVisible(true);
         mf.setLocationRelativeTo(null);

@@ -22,10 +22,10 @@ import modelo.CuentaCuotas;
  */
 public class ControladorCuentaCorriente {
     
-    public static void obtenerCuotas(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula){
+    public static void obtenerCuotas(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula, String filtro){
     
         try {
-            String consultaSQL = "SELECT matricula, mes, anio, cuentacuotas.importe, cuentacuotas.idliquidacion, cuentacuotas.idrecibo, nombre FROM cuentacuotas inner join tipocuota on cuentacuotas.idcuota=tipocuota.idcuota where matricula = " + matricula;
+            String consultaSQL = "SELECT matricula, mes, anio, cuentacuotas.importe, cuentacuotas.idliquidacion, cuentacuotas.idrecibo, nombre FROM cuentacuotas inner join tipocuota on cuentacuotas.idcuota=tipocuota.idcuota where matricula = " + matricula + filtro;
             
             Conexion conexion = new Conexion();
             conexion.Conectar();

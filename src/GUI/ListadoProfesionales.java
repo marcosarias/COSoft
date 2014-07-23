@@ -105,6 +105,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItemVerObras = new javax.swing.JMenuItem();
         jMenuItemVerCuotas = new javax.swing.JMenuItem();
         jMenuItemVerLibrosEquip = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -117,9 +118,17 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         BuscarProfesionalTextField = new javax.swing.JTextField();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+
+        jMenuItemVerObras.setText("Ver obras sociales");
+        jMenuItemVerObras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemVerObrasActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemVerObras);
 
         jMenuItemVerCuotas.setText("Ver suscripciones");
         jMenuItemVerCuotas.addActionListener(new java.awt.event.ActionListener() {
@@ -198,10 +207,10 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jToggleButton1.setText("Buscar");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("Buscar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -212,8 +221,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(BuscarProfesionalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -222,7 +231,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                 .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BuscarProfesionalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton1))
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -347,22 +356,29 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemVerLibrosEquipActionPerformed
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         String buscar = this.BuscarProfesionalTextField.getText();
         llenarTodo(buscar);
-        
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jMenuItemVerObrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerObrasActionPerformed
+        // TODO add your handling code here:
+        ListadoObrasSocialesProfesional form = new ListadoObrasSocialesProfesional(profesionales.get(jTable1.getSelectedRow()).getMatricula());
+        form.setVisible(true);
+    }//GEN-LAST:event_jMenuItemVerObrasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BuscarProfesionalTextField;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JMenuItem jMenuItemEditar;
     private javax.swing.JMenuItem jMenuItemEliminar;
     private javax.swing.JMenuItem jMenuItemVerCuotas;
     private javax.swing.JMenuItem jMenuItemVerLibrosEquip;
+    private javax.swing.JMenuItem jMenuItemVerObras;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
@@ -370,7 +386,6 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 
     @Override

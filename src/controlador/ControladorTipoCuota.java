@@ -41,6 +41,7 @@ public class ControladorTipoCuota {
     }
     
     public static void getDatos(TipoCuota tipo){
+        
         try {
             String consultaSQL = "SELECT * FROM tipocuota where idcuota = " + tipo.getIdCuota();
             
@@ -67,7 +68,7 @@ public class ControladorTipoCuota {
     public static void getTipos(ArrayList<TipoCuota> tipos){
                 
         try {
-            String consultaSQL = "SELECT * FROM tipocuota";
+            String consultaSQL = "SELECT * FROM tipocuota where idcuota <> 1";
             
             Conexion conexion = new Conexion();
             conexion.Conectar();
@@ -75,14 +76,14 @@ public class ControladorTipoCuota {
             
             while(resultado.next()){
                 
-                    TipoCuota tipo = new TipoCuota();
-                    tipo.setIdCuota(resultado.getInt("idcuota"));
-                    tipo.setNombre(resultado.getString("nombre"));
-                    tipo.setImporte(resultado.getFloat("importe"));
-                    tipo.setFrecuencia(resultado.getInt("frecuencia"));
-                    tipos.add(tipo);
-                    
-                }
+                TipoCuota tipo = new TipoCuota();
+                tipo.setIdCuota(resultado.getInt("idcuota"));
+                tipo.setNombre(resultado.getString("nombre"));
+                tipo.setImporte(resultado.getFloat("importe"));
+                tipo.setFrecuencia(resultado.getInt("frecuencia"));
+                tipos.add(tipo);
+
+            }
             
             conexion.Cerrar_conexion();
         
@@ -125,6 +126,54 @@ public class ControladorTipoCuota {
         conexion.Cerrar_conexion();
         
         return resultado;
+    
+    }
+    
+    public static String registrarCuota(int idcuota, int mes, int anio, float importe){
+    
+        ArrayList<Integer> ids = getProfesionalesDeUnaCuota(idcuota);
+        
+        String consultaSQL = "";
+        
+        for(Integer i : ids){
+        
+            consultaSQL += "INSERT INTO cuentacuotas(idcuota, matricula, mes, anio, importe) VALUES(" + idcuota + ", " + i + ", " + mes + ", " + anio + ", " + importe + ")";
+        
+        }
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+    
+    }
+    
+    private static ArrayList<Integer> getProfesionalesDeUnaCuota(int idcuota){
+
+        ArrayList<Integer> ids = new ArrayList<>();
+        
+        try {
+            String consultaSQL = "SELECT matricula from rcuotas where idcuota = " + idcuota;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    ids.add(resultado.getInt("matricula"));
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return ids;
     
     }
     
