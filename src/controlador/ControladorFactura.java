@@ -9,6 +9,7 @@ package controlador;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Conexion;
@@ -102,6 +103,24 @@ public class ControladorFactura {
         } catch (SQLException ex) {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
+    
+    }
+    
+    public static String asignarFactura(int idCuota, int matricula, String nroFactura, int mes, int anio, float importe){
+    
+        Calendar calendar = Calendar.getInstance();
+        String fecha = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+        
+        String consultaSQL = "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ");";
+        
+        consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idfactura) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \""+ nroFactura + "\");";
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
     
     }
     

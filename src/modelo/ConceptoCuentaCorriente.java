@@ -24,6 +24,7 @@ public class ConceptoCuentaCorriente implements Comparable<ConceptoCuentaCorrien
     private int idliquidacion;
     private String nombreliquidacion;
     private String idrecibo;
+    private String idfactura;
 
     /**
      * @return the id
@@ -198,6 +199,20 @@ public class ConceptoCuentaCorriente implements Comparable<ConceptoCuentaCorrien
      */
     public void setIdliquidacion(int idliquidacion) {
         this.idliquidacion = idliquidacion;
+    }
+
+    /**
+     * @return the idfactura
+     */
+    public String getIdfactura() {
+        return idfactura;
+    }
+
+    /**
+     * @param idfactura the idfactura to set
+     */
+    public void setIdfactura(String idfactura) {
+        this.idfactura = idfactura;
     }
 
     

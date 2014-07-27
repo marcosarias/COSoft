@@ -25,7 +25,7 @@ public class ControladorCuentaCorriente {
     public static void obtenerCuotas(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula, String filtro){
     
         try {
-            String consultaSQL = "SELECT matricula, mes, anio, cuentacuotas.importe, cuentacuotas.idliquidacion, cuentacuotas.idrecibo, nombre FROM cuentacuotas inner join tipocuota on cuentacuotas.idcuota=tipocuota.idcuota where matricula = " + matricula + filtro;
+            String consultaSQL = "SELECT * FROM vistacuentacorriente where matricula = " + matricula + filtro;
             
             Conexion conexion = new Conexion();
             conexion.Conectar();
@@ -37,7 +37,7 @@ public class ControladorCuentaCorriente {
                     concepto.setAnio(resultado.getInt("anio"));
                     concepto.setImporte(resultado.getFloat("importe"));
                     concepto.setDetalle(resultado.getString("nombre"));
-                    concepto.setFecha(resultado.getInt("anio") + "-" + resultado.getInt("mes") + "-01");
+                    concepto.setFecha(resultado.getString("fecha"));
                     concepto.setIdliquidacion(resultado.getInt("idliquidacion"));
                     concepto.setIdrecibo(resultado.getString("idrecibo"));
                     conceptos.add(concepto);

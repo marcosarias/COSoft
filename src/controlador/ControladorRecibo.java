@@ -9,9 +9,12 @@ package controlador;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Conexion;
+import modelo.Factura;
+import modelo.Material;
 import modelo.Recibo;
 
 /**
@@ -49,6 +52,50 @@ public class ControladorRecibo {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
     
+    }
+
+    public static String asignarRecibo(String nroRecibo, String nroFactura) {
+        
+        Calendar calendar = Calendar.getInstance();
+        String fecha = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+        
+        Factura factura = new Factura();
+        try {
+            String consultaSQL = "SELECT * FROM factura where nfactura = \"" + nroFactura + "\"";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                factura.setNroFactura(resultado.getString("nfactura"));
+                factura.setDetalle(resultado.getString("detalle"));
+                factura.setFecha(resultado.getString("fecha"));
+                factura.setMatricula(resultado.getInt("matricula"));
+                factura.setImporte(resultado.getFloat("importe"));
+                
+            }
+            
+            conexion.Cerrar_conexion();
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(factura.getNroFactura() == null)
+            return "El número de factura ingresado es inexistente";
+        
+        String consultaSQL = "INSERT INTO recibo (nrecibo, nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroRecibo + "\", " + "\"" + nroFactura + "\", " + factura.getMatricula() + ", \"" + factura.getDetalle() + "\", \"" + fecha + "\", " + factura.getImporte() + ");";
+        
+        consultaSQL += "UPDATE cuentacuotas SET idrecibo = \"" + nroRecibo + "\" WHERE idfactura = \"" + nroFactura + "\"";
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+        
     }
     
 }

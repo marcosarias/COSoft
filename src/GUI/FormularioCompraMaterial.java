@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Material;
 import modelo.Profesional;
+import utilidades.Formato;
 import utilidades.Mensaje;
 
 /**
@@ -180,7 +181,7 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
         );
 
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabelTitulo.setText("Nueva compra");
+        jLabelTitulo.setText("Nueva venta");
 
         jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -206,19 +207,18 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(109, 109, 109)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(127, 127, 127)
-                                .addComponent(jButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2)))
+                        .addGap(127, 127, 127)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator3)
+                    .addComponent(jLabelTitulo))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,25 +286,11 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private String darFormato(String s){
-    
-        String[] a = s.split("-");
-            
-        while(a[0].length() < 4)
-            a[0] = "0" + a[0];
-        
-        while(a[1].length() < 8)
-            a[1] = "0" + a[1];
-            
-        return a[0] + "-" + a[1];
-        
-    }
-    
     private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
         // TODO add your handling code here:
         String s = jTextField1.getText();
         if(s.contains("-"))
-            jTextField1.setText(darFormato(s));
+            jTextField1.setText(Formato.darFormatoFactura(s));
         else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de factura", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jTextField1FocusLost
 
@@ -312,8 +298,9 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
         // TODO add your handling code here:
         String s = jTextField2.getText();
         if(s.contains("-"))
-            jTextField2.setText(darFormato(s));
-        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de recibo", "Error", JOptionPane.ERROR_MESSAGE);
+            jTextField2.setText(Formato.darFormatoFactura(s));
+        else if(s.length() > 0) 
+                Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de recibo", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jTextField2FocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

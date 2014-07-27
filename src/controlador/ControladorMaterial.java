@@ -179,9 +179,9 @@ public class ControladorMaterial {
         if(!nroRecibo.equals("")){
         
             consultaSQL += "INSERT INTO recibo (nrecibo, matricula, detalle, fecha, importe, nfactura) VALUES (\"" + nroRecibo + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ", \"" + nroFactura + "\");";
-            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idrecibo) VALUES (" + matricula + ", 1, " + importe + ", " + fecha.split("-")[1] + ", " + fecha.split("-")[0] + ", \"" + nroRecibo + "\");";
+            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idrecibo, idfactura) VALUES (" + matricula + ", 1, " + importe + ", " + fecha.split("-")[1] + ", " + fecha.split("-")[0] + ", \"" + nroRecibo + "\", \"" + nroFactura + "\");";
         }
-        else consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio) VALUES (" + matricula + ", 1, " + importe + ", " + fecha.split("-")[1] + ", " + fecha.split("-")[0] + ");";
+        else consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idfactura) VALUES (" + matricula + ", 1, " + importe + ", " + fecha.split("-")[1] + ", " + fecha.split("-")[0] + ", \"" + nroFactura + "\");";
             
         for(Material material : materiales){
         

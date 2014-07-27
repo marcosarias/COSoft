@@ -105,9 +105,11 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItemVerCuentaCorriente = new javax.swing.JMenuItem();
         jMenuItemVerObras = new javax.swing.JMenuItem();
         jMenuItemVerCuotas = new javax.swing.JMenuItem();
         jMenuItemVerLibrosEquip = new javax.swing.JMenuItem();
+        jMenuItemAsignar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemEditar = new javax.swing.JMenuItem();
         jMenuItemEliminar = new javax.swing.JMenuItem();
@@ -121,6 +123,14 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+
+        jMenuItemVerCuentaCorriente.setText("Ver cuenta corriente");
+        jMenuItemVerCuentaCorriente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemVerCuentaCorrienteActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemVerCuentaCorriente);
 
         jMenuItemVerObras.setText("Ver obras sociales");
         jMenuItemVerObras.addActionListener(new java.awt.event.ActionListener() {
@@ -145,6 +155,14 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             }
         });
         jPopupMenu1.add(jMenuItemVerLibrosEquip);
+
+        jMenuItemAsignar.setText("Asignar factura");
+        jMenuItemAsignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAsignarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemAsignar);
         jPopupMenu1.add(jSeparator1);
 
         jMenuItemEditar.setText("Editar");
@@ -193,7 +211,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap(451, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -368,14 +386,27 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         form.setVisible(true);
     }//GEN-LAST:event_jMenuItemVerObrasActionPerformed
 
+    private void jMenuItemAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAsignarActionPerformed
+        AsignarFactura form = new AsignarFactura(profesionales.get(jTable1.getSelectedRow()).getMatricula());
+        form.setVisible(true);
+    }//GEN-LAST:event_jMenuItemAsignarActionPerformed
+
+    private void jMenuItemVerCuentaCorrienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerCuentaCorrienteActionPerformed
+        FormularioCuentaCorriente cc = new FormularioCuentaCorriente();
+        cc.setData(profesionales.get(jTable1.getSelectedRow()).getMatricula(), profesionales.get(jTable1.getSelectedRow()).getNombre());
+        cc.setVisible(true);
+    }//GEN-LAST:event_jMenuItemVerCuentaCorrienteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BuscarProfesionalTextField;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JMenuItem jMenuItemAsignar;
     private javax.swing.JMenuItem jMenuItemEditar;
     private javax.swing.JMenuItem jMenuItemEliminar;
+    private javax.swing.JMenuItem jMenuItemVerCuentaCorriente;
     private javax.swing.JMenuItem jMenuItemVerCuotas;
     private javax.swing.JMenuItem jMenuItemVerLibrosEquip;
     private javax.swing.JMenuItem jMenuItemVerObras;
