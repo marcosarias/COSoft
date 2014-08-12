@@ -86,14 +86,14 @@ public class ListadoFacturas extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Nro Factura", "Fecha", "Importe", "Detalle", "Profesional"
+                "Nro Factura", "Fecha", "Importe", "Profesional"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -160,7 +160,7 @@ public class ListadoFacturas extends javax.swing.JDialog {
         
         for(Factura factura : facturas){
         
-            Object[] data = { factura.getNroFactura(), factura.getFecha(), factura.getImporte(), factura.getDetalle(), factura.getNombre() };
+            Object[] data = { factura.getNroFactura(), factura.getFecha(), factura.getImporte(), factura.getNombre() };
             modelo.addRow(data);
         
         }

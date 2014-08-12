@@ -42,7 +42,7 @@
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItemAsignar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Asignar factura"/>
+            <Property name="text" type="java.lang.String" value="Generar cuota"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemAsignarActionPerformed"/>

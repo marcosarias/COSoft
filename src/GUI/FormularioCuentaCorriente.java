@@ -91,19 +91,17 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jSpinner1 = new javax.swing.JSpinner();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox();
         jSpinner2 = new javax.swing.JSpinner();
         jComboBox3 = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -115,14 +113,14 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Fecha", "Detalle", "Debe", "Haber"
+                "Fecha", "Detalle", "Debe", "Haber", "Factura"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -135,10 +133,6 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Aceptar");
-
-        jButton2.setText("Cancelar");
-
         jTextField1.setEditable(false);
 
         jLabel2.setText("Saldo adeudado");
@@ -146,32 +140,18 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel(2004, 2004, 2050, 1));
-        jSpinner1.setEnabled(false);
-
-        jCheckBox1.setText("Filtrar por fecha");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Desde");
-        jLabel3.setEnabled(false);
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
-        jComboBox2.setEnabled(false);
 
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(2004, 2004, 2050, 1));
-        jSpinner2.setEnabled(false);
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
-        jComboBox3.setEnabled(false);
 
         jLabel6.setText("Hasta");
-        jLabel6.setEnabled(false);
 
         jButton3.setText("Filtrar");
-        jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -184,8 +164,6 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBox1)
-                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -199,7 +177,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(127, 127, 127))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +185,6 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1)
                     .addComponent(jLabel3)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,6 +193,13 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
                     .addComponent(jButton3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jButton4.setText("Cobrar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -231,16 +215,14 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(234, 234, 234)
-                                .addComponent(jButton1)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton2))
+                                .addContainerGap()
+                                .addComponent(jButton4))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(253, 253, 253)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel1))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 295, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,41 +245,13 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-        if(jCheckBox1.isSelected()){
-        
-            jLabel3.setEnabled(true);
-            jLabel6.setEnabled(true);
-            jSpinner1.setEnabled(true);
-            jSpinner2.setEnabled(true);
-            jComboBox2.setEnabled(true);
-            jComboBox3.setEnabled(true);
-            jButton3.setEnabled(true);
-        
-        }
-        else{
-        
-            jLabel3.setEnabled(false);
-            jLabel6.setEnabled(false);
-            jSpinner1.setEnabled(false);
-            jSpinner2.setEnabled(false);
-            jComboBox2.setEnabled(false);
-            jComboBox3.setEnabled(false);
-            filtro = "";
-        
-        }
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -305,11 +259,13 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         llenarTodo();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
@@ -345,16 +301,16 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
             
                 if(concepto.getIdrecibo() == null){
                     
-                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 };  //DEBE
+                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                     modelo.addRow(data);
                     saldo += concepto.getImporte();
                     
                 }
                 else{       //PAGO EFECTIVO, solo al comprar materiales
                 
-                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 };  //DEBE
+                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                     modelo.addRow(data);
-                    Object[] data2 = { "", "Recibo: " + concepto.getIdrecibo(), 0, concepto.getImporte() };  //HABER
+                    Object[] data2 = { "", "Recibo: " + concepto.getIdrecibo(), 0, concepto.getImporte(), "" };  //HABER
                     modelo.addRow(data2);
                 
                 }
@@ -362,10 +318,10 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
             }
             else{
             
-                Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 };  //DEBE
+                Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                 modelo.addRow(data);
                 
-                Object[] data2 = { "", "Liquidación: " + concepto.getNombreliquidacion(), 0, concepto.getImporte() };  //HABER
+                Object[] data2 = { "", "Liquidación: " + concepto.getNombreliquidacion(), 0, concepto.getImporte() , "" };  //HABER
                 modelo.addRow(data2);
             
             }

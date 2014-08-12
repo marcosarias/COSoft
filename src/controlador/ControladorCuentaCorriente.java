@@ -40,6 +40,7 @@ public class ControladorCuentaCorriente {
                     concepto.setFecha(resultado.getString("fecha"));
                     concepto.setIdliquidacion(resultado.getInt("idliquidacion"));
                     concepto.setIdrecibo(resultado.getString("idrecibo"));
+                    concepto.setIdfactura(resultado.getString("idfactura"));
                     conceptos.add(concepto);
                     
                 }

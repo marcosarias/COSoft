@@ -24,7 +24,7 @@ import utilidades.Mensaje;
  *
  * @author COCO
  */
-public class AsignarFactura extends javax.swing.JDialog {
+public class GenerarCuota extends javax.swing.JDialog {
 
     DefaultComboBoxModel modeloCuotas = new DefaultComboBoxModel();
     
@@ -32,7 +32,7 @@ public class AsignarFactura extends javax.swing.JDialog {
     
     int matricula;
     
-    public AsignarFactura(int matricula) {
+    public GenerarCuota(int matricula) {
         initComponents();
         setModal(true);
         setLocationRelativeTo(null);
@@ -74,6 +74,8 @@ public class AsignarFactura extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -109,6 +111,14 @@ public class AsignarFactura extends javax.swing.JDialog {
             }
         });
 
+        jLabel5.setText("Fecha factura");
+
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,28 +127,32 @@ public class AsignarFactura extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 86, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(88, 88, 88))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(30, 30, 30)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addGap(40, 40, 40)
+                        .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSpinner1))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField2))
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,6 +161,10 @@ public class AsignarFactura extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,7 +177,7 @@ public class AsignarFactura extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(16, 16, 16)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -170,12 +188,12 @@ public class AsignarFactura extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
     TipoCuota cuotaSeleccionada = tipoCuotas.get(jComboBox1.getSelectedIndex());
-    String resultado = ControladorFactura.asignarFactura(cuotaSeleccionada.getIdCuota(), matricula, jTextField1.getText(), jComboBox2.getSelectedIndex() + 1, (int)jSpinner1.getValue(), cuotaSeleccionada.getImporte());
+    String resultado = ControladorFactura.asignarFactura(cuotaSeleccionada.getIdCuota(), matricula, jTextField1.getText(), jComboBox2.getSelectedIndex() + 1, (int)jSpinner1.getValue(), cuotaSeleccionada.getImporte(), jTextField2.getText());
     if(resultado.equals("")){  //No hubo error
-        Mensaje.mostrarMensaje(rootPane, "Factura asignada con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+        Mensaje.mostrarMensaje(rootPane, "Cuota generada con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }
-    else Mensaje.mostrarMensaje(rootPane, "Error al asignar la factura:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+    else Mensaje.mostrarMensaje(rootPane, "Error al generar la cuota:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
     
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -184,11 +202,15 @@ public class AsignarFactura extends javax.swing.JDialog {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
-        String s = jTextField1.getText();
-        if(s.contains("-"))
-            jTextField1.setText(Formato.darFormatoFactura(s));
-        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de factura", "Error", JOptionPane.ERROR_MESSAGE);
+        //String s = jTextField1.getText();
+        //if(s.contains("-"))
+        //    jTextField1.setText(Formato.darFormatoFactura(s));
+        //else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de factura", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jTextField1FocusLost
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2FocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -198,7 +220,9 @@ public class AsignarFactura extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

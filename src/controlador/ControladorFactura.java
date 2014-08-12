@@ -106,15 +106,27 @@ public class ControladorFactura {
     
     }
     
-    public static String asignarFactura(int idCuota, int matricula, String nroFactura, int mes, int anio, float importe){
+    public static String asignarFactura(int idCuota, int matricula, String nroFactura, int mes, int anio, float importe, String fecha){
     
         Calendar calendar = Calendar.getInstance();
-        String fecha = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+        String fechaFinal;
+        if(fecha.equals(""))
+            fechaFinal = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+        else{ 
+                String[] aux = fecha.split("-");
+                fecha = aux[2] + "-" + aux[1] + "-" + aux[0];
+                fechaFinal = fecha;
+            }
         
-        String consultaSQL = "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ");";
         
-        consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idfactura) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \""+ nroFactura + "\");";
-        
+        String consultaSQL = "";
+
+        if(!nroFactura.equals("")){
+            consultaSQL += "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fechaFinal + "\", " + importe + ");";
+            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idfactura, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + nroFactura + "\", \"" + fechaFinal + "\");";
+        }
+        else consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + fechaFinal + "\");"; 
+            
         Conexion conexion = new Conexion();
         conexion.Conectar();
         String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);

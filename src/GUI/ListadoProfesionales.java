@@ -156,7 +156,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         });
         jPopupMenu1.add(jMenuItemVerLibrosEquip);
 
-        jMenuItemAsignar.setText("Asignar factura");
+        jMenuItemAsignar.setText("Generar cuota");
         jMenuItemAsignar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemAsignarActionPerformed(evt);
@@ -387,7 +387,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     }//GEN-LAST:event_jMenuItemVerObrasActionPerformed
 
     private void jMenuItemAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAsignarActionPerformed
-        AsignarFactura form = new AsignarFactura(profesionales.get(jTable1.getSelectedRow()).getMatricula());
+        GenerarCuota form = new GenerarCuota(profesionales.get(jTable1.getSelectedRow()).getMatricula());
         form.setVisible(true);
     }//GEN-LAST:event_jMenuItemAsignarActionPerformed
 
