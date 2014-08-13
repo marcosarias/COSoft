@@ -89,6 +89,10 @@ public class FormularioProfesional extends javax.swing.JDialog {
         jTextField13.setText(profesional.getBanco());
         jTextField12.setText(profesional.getCbu());
         jTextField1.setText(String.valueOf(profesional.getMatricula()));
+        if(profesional.getActivo() == 1)
+            jCheckBox1.setSelected(true);
+        else jCheckBox1.setSelected(false);
+            
                 
     }
     
@@ -118,6 +122,8 @@ public class FormularioProfesional extends javax.swing.JDialog {
         jTextField13 = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
@@ -152,6 +158,8 @@ public class FormularioProfesional extends javax.swing.JDialog {
 
         jTextField1.setEditable(false);
 
+        jLabel25.setText("Activo:");
+
         javax.swing.GroupLayout nuevoOdontologoPanelLayout = new javax.swing.GroupLayout(nuevoOdontologoPanel);
         nuevoOdontologoPanel.setLayout(nuevoOdontologoPanelLayout);
         nuevoOdontologoPanelLayout.setHorizontalGroup(
@@ -161,7 +169,7 @@ public class FormularioProfesional extends javax.swing.JDialog {
                 .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator2))
-                .addGap(0, 231, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(nuevoOdontologoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,10 +178,10 @@ public class FormularioProfesional extends javax.swing.JDialog {
                             .addComponent(jLabel17)
                             .addComponent(jLabel18))
                         .addGap(47, 47, 47)
-                        .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField12)
-                            .addComponent(jTextField9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField9)
+                            .addComponent(jTextField12))
+                        .addGap(1, 1, 1)
                         .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel19)
                             .addGroup(nuevoOdontologoPanelLayout.createSequentialGroup()
@@ -185,17 +193,23 @@ public class FormularioProfesional extends javax.swing.JDialog {
                             .addGroup(nuevoOdontologoPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel24)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1))))
+                                .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox1)
+                                    .addComponent(jTextField1)))))
                     .addGroup(nuevoOdontologoPanelLayout.createSequentialGroup()
                         .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
                             .addComponent(jLabel16))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(nuevoOdontologoPanelLayout.createSequentialGroup()
-                                .addComponent(jTextField10)
-                                .addGap(218, 218, 218))
-                            .addComponent(jTextField11))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, nuevoOdontologoPanelLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel25)
+                        .addGap(0, 177, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         nuevoOdontologoPanelLayout.setVerticalGroup(
@@ -208,7 +222,10 @@ public class FormularioProfesional extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel15)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCheckBox1)
+                    .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel25)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(nuevoOdontologoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
@@ -290,6 +307,9 @@ public class FormularioProfesional extends javax.swing.JDialog {
             profesional.setDireccion(jTextField9.getText());
             profesional.setCbu(jTextField12.getText());
             profesional.setBanco(jTextField13.getText());
+            if(jCheckBox1.isSelected())
+                profesional.setActivo(1);
+            else profesional.setActivo(0);
             //Tomo valores de campos y se los asigno al objeto
             String resultado = ControladorProfesional.insertar(profesional);
             if(resultado.equals(""))  //No hubo error
@@ -307,6 +327,9 @@ public class FormularioProfesional extends javax.swing.JDialog {
             profesional.setDireccion(jTextField9.getText());
             profesional.setCbu(jTextField12.getText());
             profesional.setBanco(jTextField13.getText());
+            if(jCheckBox1.isSelected())
+                profesional.setActivo(1);
+            else profesional.setActivo(0);
             String resultado = ControladorProfesional.editar(profesional);
             if(resultado.equals(""))  //No hubo error
                 Mensaje.mostrarMensaje(rootPane, "Profesional editado con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
@@ -325,6 +348,7 @@ public class FormularioProfesional extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -333,6 +357,7 @@ public class FormularioProfesional extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTextField1;

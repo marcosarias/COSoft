@@ -21,7 +21,7 @@ public class ControladorProfesional {
     public static String insertar(Profesional profesional){
     
         StringBuilder sqlbuild = new StringBuilder();
-        sqlbuild.append("INSERT INTO profesional (matricula, nombre, telefonos, direccion, localidad, cbu, banco) VALUES (");
+        sqlbuild.append("INSERT INTO profesional (matricula, nombre, telefonos, direccion, localidad, cbu, banco, activo) VALUES (");
         sqlbuild.append(profesional.getMatricula());
         sqlbuild.append(", \"");
         sqlbuild.append(profesional.getNombre());
@@ -35,7 +35,9 @@ public class ControladorProfesional {
         sqlbuild.append(profesional.getCbu());
         sqlbuild.append("\", \"");
         sqlbuild.append(profesional.getBanco());
-        sqlbuild.append("\")");
+        sqlbuild.append("\", ");
+        sqlbuild.append(profesional.getActivo());
+        sqlbuild.append(")");
         
         String consultaSQL = sqlbuild.toString();
         
@@ -64,6 +66,7 @@ public class ControladorProfesional {
                     profesional.setCbu(resultado.getString("cbu"));
                     profesional.setBanco(resultado.getString("banco"));
                     profesional.setIdlocalidad(resultado.getInt("localidad"));
+                    profesional.setActivo(resultado.getInt("activo"));
                     
                 }
             
@@ -91,6 +94,7 @@ public class ControladorProfesional {
                     profesional.setCbu(resultado.getString("cbu"));
                     profesional.setBanco(resultado.getString("banco"));
                     profesional.setIdlocalidad(resultado.getInt("localidad"));
+                    profesional.setActivo(resultado.getInt("activo"));
                     
                 }
             
@@ -120,6 +124,7 @@ public class ControladorProfesional {
                     profesional.setCbu(resultado.getString("cbu"));
                     profesional.setBanco(resultado.getString("banco"));
                     profesional.setLocalidad(resultado.getString("localidad"));
+                    profesional.setActivo(resultado.getInt("activo"));
                     profesionales.add(profesional);
                     
                 }
@@ -152,6 +157,7 @@ public class ControladorProfesional {
                     profesional.setCbu(resultado.getString("cbu"));
                     profesional.setBanco(resultado.getString("banco"));
                     profesional.setLocalidad(resultado.getString("localidad"));
+                    profesional.setActivo(resultado.getInt("activo"));
                     profesionales.add(profesional);
                     
                 }
@@ -183,6 +189,7 @@ public class ControladorProfesional {
                     profesional.setCbu(resultado.getString("cbu"));
                     profesional.setBanco(resultado.getString("banco"));
                     profesional.setLocalidad(resultado.getString("localidad"));
+                    profesional.setActivo(resultado.getInt("activo"));
                     profesionales.add(profesional);
                     
                 }
@@ -210,6 +217,8 @@ public class ControladorProfesional {
         sqlbuild.append(profesional.getBanco());
         sqlbuild.append("\", localidad=");
         sqlbuild.append(profesional.getIdlocalidad());
+        sqlbuild.append(", activo=");
+        sqlbuild.append(profesional.getActivo());
         
         sqlbuild.append(" where matricula = ");
         sqlbuild.append(profesional.getMatricula());

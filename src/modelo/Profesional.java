@@ -21,6 +21,7 @@ public class Profesional {
     private String localidad;
     private int idlocalidad;
     private TipoCuota tipoCuota;
+    private int activo;
     
     private ArrayList<ObraSocial> obrasSociales;
 
@@ -162,6 +163,20 @@ public class Profesional {
      */
     public void setIdlocalidad(int idlocalidad) {
         this.idlocalidad = idlocalidad;
+    }
+
+    /**
+     * @return the activo
+     */
+    public int getActivo() {
+        return activo;
+    }
+
+    /**
+     * @param activo the activo to set
+     */
+    public void setActivo(int activo) {
+        this.activo = activo;
     }
     
 }

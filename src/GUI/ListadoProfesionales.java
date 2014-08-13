@@ -118,6 +118,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         BuscarProfesionalTextField = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
@@ -202,6 +203,13 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             }
         });
 
+        jButton4.setText("Generar cuotas");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -211,6 +219,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -219,7 +229,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -258,14 +269,14 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
 
             },
             new String [] {
-                "Matricula", "Nombre", "Dirección", "Teléfonos", "CBU", "Banco", "Localidad"
+                "Matricula", "Nombre", "Dirección", "Teléfonos", "CBU", "Banco", "Localidad", "Activo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -285,6 +296,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             jTable1.getColumnModel().getColumn(4).setResizable(false);
             jTable1.getColumnModel().getColumn(5).setResizable(false);
             jTable1.getColumnModel().getColumn(6).setResizable(false);
+            jTable1.getColumnModel().getColumn(7).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -397,11 +409,18 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         cc.setVisible(true);
     }//GEN-LAST:event_jMenuItemVerCuentaCorrienteActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BuscarProfesionalTextField;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JMenuItem jMenuItemAsignar;
     private javax.swing.JMenuItem jMenuItemEditar;
@@ -447,7 +466,12 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         
         for(Profesional profesional : profesionales){
         
-            String[] data = { String.valueOf(profesional.getMatricula()), profesional.getNombre(), profesional.getDireccion(), profesional.getTelefonos(), profesional.getCbu(), profesional.getBanco(), profesional.getLocalidad() };
+            String activo;
+            if(profesional.getActivo() == 1)
+                activo = "Si";
+            else activo = "No";
+            
+            String[] data = { String.valueOf(profesional.getMatricula()), profesional.getNombre(), profesional.getDireccion(), profesional.getTelefonos(), profesional.getCbu(), profesional.getBanco(), profesional.getLocalidad(), activo };
             modelo.addRow(data);
         
         }
@@ -468,7 +492,11 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         
         for(Profesional profesional : profesionales){
         
-            String[] data = { String.valueOf(profesional.getMatricula()), profesional.getNombre(), profesional.getDireccion(), profesional.getTelefonos(), profesional.getCbu(), profesional.getBanco(), profesional.getLocalidad() };
+            String activo;
+            if(profesional.getActivo() == 1)
+                activo = "Si";
+            else activo = "No";
+            String[] data = { String.valueOf(profesional.getMatricula()), profesional.getNombre(), profesional.getDireccion(), profesional.getTelefonos(), profesional.getCbu(), profesional.getBanco(), profesional.getLocalidad(), activo };
             modelo.addRow(data);
         
         }

@@ -85,7 +85,7 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Cuota", "Frecuencia", "Importe", "Paga"
+                "Cuota", "Frecuencia", "Importe", "Adherido"
             }
         ) {
             Class[] types = new Class [] {

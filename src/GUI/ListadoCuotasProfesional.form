@@ -77,7 +77,7 @@
                 <Column editable="false" title="Cuota" type="java.lang.String"/>
                 <Column editable="true" title="Frecuencia" type="java.lang.String"/>
                 <Column editable="false" title="Importe" type="java.lang.Float"/>
-                <Column editable="true" title="Paga" type="java.lang.Boolean"/>
+                <Column editable="true" title="Adherido" type="java.lang.Boolean"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
