@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import modelo.Conexion;
 import modelo.Factura;
 import modelo.Material;
+import modelo.TipoCuota;
 
 /**
  *
@@ -106,27 +107,62 @@ public class ControladorFactura {
     
     }
     
-    public static String asignarFactura(int idCuota, int matricula, String nroFactura, int mes, int anio, float importe, String fecha){
+    public static void obtenerCuotasFactura(ArrayList<TipoCuota> cuotas, String nroFactura){
     
-        Calendar calendar = Calendar.getInstance();
-        String fechaFinal;
-        if(fecha.equals(""))
-            fechaFinal = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
-        else{ 
-                String[] aux = fecha.split("-");
-                fecha = aux[2] + "-" + aux[1] + "-" + aux[0];
-                fechaFinal = fecha;
-            }
+        try {
+            String consultaSQL = "SELECT nombre, cuentacuotas.importe FROM cuentacuotas inner join tipocuota on cuentacuotas.idcuota = tipocuota.idcuota where cuentacuotas.idcuota <> 1 AND idfactura = '" + nroFactura + "'";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    TipoCuota cuota = new TipoCuota();
+                    cuota.setImporte(resultado.getInt("importe"));
+                    cuota.setNombre(resultado.getString("nombre"));
+                    cuotas.add(cuota);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
         
-        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
+    public static String generarCuota(int idCuota, int matricula, String nroFactura, int mes, int anio, float importe, String fecha){
+            
         String consultaSQL = "";
 
         if(!nroFactura.equals("")){
-            consultaSQL += "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fechaFinal + "\", " + importe + ");";
-            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idfactura, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + nroFactura + "\", \"" + fechaFinal + "\");";
+            consultaSQL += "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ");";
+            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, idfactura, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + nroFactura + "\", \"" + fecha + "\");";
         }
-        else consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + fechaFinal + "\");"; 
+        else consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + fecha + "\");"; 
             
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+    
+    }
+    
+    public static String generarCuotas(int idCuota, String fecha, int mes, int anio, float importe){
+    
+        ArrayList<Integer> matriculas = ControladorProfesional.getProfesionalesActivoDeCuota(idCuota);
+        
+        String consultaSQL = "";
+        for(int matricula : matriculas){
+        
+            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, mes, anio, fechadebito) VALUES (" + matricula + ", " + idCuota + ", " + importe + ", " + mes + ", " + anio + ", \"" + fecha + "\");"; 
+        
+        }
+        
         Conexion conexion = new Conexion();
         conexion.Conectar();
         String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);

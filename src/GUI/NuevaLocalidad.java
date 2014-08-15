@@ -145,6 +145,7 @@ public class NuevaLocalidad extends javax.swing.JDialog {
 
         localidad = new Localidad();
         localidad.setNombre(jTextField6.getText());
+        localidad.setIdlocalidad(Integer.parseInt(jTextField7.getText()));
         //Tomo valores de campos y se los asigno al objeto
         String resultado = ControladorLocalidad.insertar(localidad);
         if (resultado.equals("")) //No hubo error

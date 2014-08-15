@@ -11,6 +11,8 @@ import controlador.ControladorMaterial;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JTable;
@@ -23,10 +25,12 @@ import modelo.Material;
  *
  * @author COCO
  */
-public class FormularioCuentaCorriente extends javax.swing.JDialog {
+public class FormularioCuentaCorriente extends javax.swing.JDialog implements WindowFocusListener {
 
     int id;
     String filtro;
+    
+    Boolean deboRefrescar;
     
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
@@ -47,6 +51,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
         
         conceptos = new ArrayList<>();
         
+        deboRefrescar = false;
+        
         jTable1.addMouseListener(new MouseAdapter() {
             
             @Override
@@ -62,6 +68,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
             }
             
         });
+        
+        addWindowFocusListener(this);
         
         jSpinner2.setValue(Calendar.getInstance().get(Calendar.YEAR));
         jComboBox3.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
@@ -265,13 +273,19 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        filtro = "  and Concat(anio,mes) >= " + String.valueOf(jSpinner1.getValue()) + String.valueOf((jComboBox2.getSelectedIndex() + 1)) + " and Concat(anio,mes) <= " + String.valueOf(jSpinner2.getValue()) + (jComboBox3.getSelectedIndex() + 1);
+        
+        //filtro = "  and Concat(anio,mes) >= " + String.valueOf(jSpinner1.getValue()) + String.valueOf((jComboBox2.getSelectedIndex() + 1)) + " and Concat(anio,mes) <= " + String.valueOf(jSpinner2.getValue()) + (jComboBox3.getSelectedIndex() + 1);
+        filtro = " and fecha >= '" + String.valueOf(jSpinner1.getValue()) + "-" + String.valueOf((jComboBox2.getSelectedIndex() + 1)) + "-31' AND fecha >= '" + String.valueOf(jSpinner2.getValue()) + "-" + (jComboBox3.getSelectedIndex() + 1) + "-1'";
         llenarTodo();
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        
+        deboRefrescar = true;
+        CobrarDebitos form = new CobrarDebitos(id);
+        form.setVisible(true);
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -348,6 +362,20 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog {
             jTextField1.setText(String.valueOf(saldo));
             
         }
+        
+    }
+
+    @Override
+    public void windowGainedFocus(WindowEvent e) {
+        
+        if(deboRefrescar)
+            llenarTodo();
+        deboRefrescar = false;
+        
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent e) {
         
     }
     

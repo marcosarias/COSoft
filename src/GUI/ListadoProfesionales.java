@@ -411,7 +411,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         
-        
+        GenerarCuotas form = new GenerarCuotas();
+        form.setVisible(true);
         
     }//GEN-LAST:event_jButton4ActionPerformed
 

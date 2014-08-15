@@ -7,12 +7,12 @@
 package GUI;
 
 import controlador.ControladorFactura;
-import controlador.ControladorMaterial;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import modelo.Factura;
 import modelo.Material;
+import modelo.TipoCuota;
 
 /**
  *
@@ -24,11 +24,13 @@ public class FormularioFactura extends javax.swing.JDialog {
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
     
     ArrayList<Material> materiales;
+    ArrayList<TipoCuota> cuotas;
     
     String nroFactura;
     
     /**
      * Creates new form FormularioFactura
+     * @param nroFactura
      */
     public FormularioFactura(String nroFactura) {
         initComponents();
@@ -42,6 +44,7 @@ public class FormularioFactura extends javax.swing.JDialog {
         modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
         
         materiales = new ArrayList<>();
+        cuotas = new ArrayList<>();
         
         llenarTodo();
         
@@ -74,14 +77,14 @@ public class FormularioFactura extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Material", "Marca", "Cantidad", "Subtotal"
+                "Concepto", "Cantidad", "Subtotal"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Float.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -95,6 +98,15 @@ public class FormularioFactura extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Total:");
+
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,6 +143,24 @@ public class FormularioFactura extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        
+        
+        
+        
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        
+            nroFactura = jTextField3.getText();
+            llenarTodo();
+        
+        }
+        
+    }//GEN-LAST:event_jTextField3KeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -157,7 +187,20 @@ public class FormularioFactura extends javax.swing.JDialog {
         
             float sub = material.getCantidadCompra()*material.getPrecio();
             total += sub;
-            Object[] data = { material.getTipo(), material.getMarca(), material.getCantidadCompra(), sub };
+            Object[] data = { material.getTipo() + " " + material.getMarca(), material.getCantidadCompra(), sub };
+            modelo.addRow(data);
+        
+        }
+        
+        cuotas.clear();
+        
+        ControladorFactura.obtenerCuotasFactura(cuotas, nroFactura);
+        
+        for(TipoCuota cuota : cuotas){
+        
+            float sub = cuota.getImporte();
+            total += sub;
+            Object[] data = { cuota.getNombre() , 1, sub };
             modelo.addRow(data);
         
         }

@@ -17,7 +17,7 @@ public class Conexion {
     
     final String base = "cosoft";
     final String usuario = "root";
-    final String passwd = "";
+    final String passwd = "root";
     final String url = "jdbc:mysql://localhost:3306/" + base + "?allowMultiQueries=true";
     Connection conn = null;
     Statement consulta;

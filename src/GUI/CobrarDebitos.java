@@ -6,17 +6,53 @@
 
 package GUI;
 
+import controlador.ControladorCuentaCorriente;
+import controlador.ControladorRecibo;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import modelo.ConceptoCuentaCorriente;
+import utilidades.Fecha;
+import utilidades.Formato;
+import utilidades.Mensaje;
+
 /**
  *
  * @author COCO
  */
 public class CobrarDebitos extends javax.swing.JDialog {
 
+    ArrayList<ConceptoCuentaCorriente> conceptos;
+    
+    private DefaultTableModel modelo = new DefaultTableModel();
+    private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
+    
+    int matricula;
+    
     /**
      * Creates new form CobrarDebitos
+     * @param matricula
      */
-    public CobrarDebitos() {
+    public CobrarDebitos(int matricula) {
         initComponents();
+        setModal(true);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        this.matricula = matricula;
+        
+        conceptos = new ArrayList<>();
+        
+        modelo = (DefaultTableModel) jTable1.getModel();
+        modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
+        
+        llenarTodo();
+        
+        jTextField3.setText(Fecha.getFechaActual());
+        
     }
 
     /**
@@ -45,14 +81,14 @@ public class CobrarDebitos extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Fecha", "Detalle", "Importe"
+                "Fecha", "Detalle", "Importe", "Cobrar"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -63,6 +99,11 @@ public class CobrarDebitos extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Monto total");
@@ -70,6 +111,11 @@ public class CobrarDebitos extends javax.swing.JDialog {
         jLabel2.setText("Nro recibo");
 
         jButton1.setText("Cobrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Fecha recibo");
 
@@ -80,9 +126,12 @@ public class CobrarDebitos extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
@@ -92,11 +141,8 @@ public class CobrarDebitos extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
                                     .addComponent(jTextField1)
-                                    .addComponent(jTextField2)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jTextField2))))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,6 +169,49 @@ public class CobrarDebitos extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        
+        float saldo = 0;
+        int i = 0;
+        for(ConceptoCuentaCorriente concepto : conceptos){
+            if((Boolean)modelo.getValueAt(i, 3))
+                saldo += concepto.getImporte();
+            i++;
+        }
+        
+        jTextField1.setText(String.valueOf(saldo));
+        
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        String recibo = jTextField2.getText();
+        if(!recibo.equals("")){
+        
+            if(recibo.contains("-")){
+                
+                ArrayList<ConceptoCuentaCorriente> nuevos = new ArrayList<>();
+                int i = 0;
+                for(ConceptoCuentaCorriente concepto : conceptos){
+                    if((Boolean)modelo.getValueAt(i, 3))
+                        nuevos.add(concepto);
+                    i++;
+                }
+                jTextField2.setText(Formato.darFormatoFactura(recibo));
+                String resultado = ControladorRecibo.cobrarDebitos(nuevos, Float.parseFloat(jTextField1.getText()), matricula, jTextField2.getText(), Fecha.invertirFecha(jTextField3.getText()));
+                if(resultado.equals("")){  //No hubo error
+                    Mensaje.mostrarMensaje(rootPane, "Debitos cobrados con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                }
+                else Mensaje.mostrarMensaje(rootPane, "Error al cobrar los debitos:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else Mensaje.mostrarMensaje(rootPane, "Formato de nro de recibo invalido", "Error", JOptionPane.ERROR_MESSAGE);
+        
+        }
+        else Mensaje.mostrarMensaje(rootPane, "Ingrese un numero de recibo", "Error", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -134,4 +223,25 @@ public class CobrarDebitos extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
+
+    private void llenarTodo() {
+        
+        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
+        
+            modelo.removeRow(i);
+        
+        }
+        
+        conceptos.clear();
+        
+        ControladorCuentaCorriente.obtenerCuotasSinRecibo(conceptos, matricula);
+        
+        for(ConceptoCuentaCorriente concepto : conceptos){
+        
+            Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), false };
+            modelo.addRow(data);
+            
+        }
+        
+    }
 }

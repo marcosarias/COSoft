@@ -60,6 +60,34 @@ public class ControladorCuentaCorriente {
         }
     
     }
+          
+    public static void obtenerCuotasSinRecibo(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula){
+    
+        try {
+            String consultaSQL = "SELECT * FROM vistacuentacorriente where idrecibo is null and matricula = " + matricula;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                    
+                    ConceptoCuentaCorriente concepto = new ConceptoCuentaCorriente();
+                    concepto.setId(resultado.getInt("id"));
+                    concepto.setImporte(resultado.getFloat("importe"));
+                    concepto.setDetalle(resultado.getString("nombre"));
+                    concepto.setFecha(resultado.getString("fecha"));
+                    conceptos.add(concepto);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
      public static void obtenerCuotasAdeudadas(ArrayList<CuentaCuotas> cuentacuotas, int matricula){
     

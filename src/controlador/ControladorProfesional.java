@@ -317,6 +317,32 @@ public class ControladorProfesional {
         return resultado;
         
     }
+    
+    public static ArrayList<Integer> getProfesionalesActivoDeCuota(int idcuota){
+    
+        ArrayList<Integer> ids = new ArrayList<>();
+        try {
+            String consultaSQL = "select rcuotas.matricula from rcuotas inner join profesional on rcuotas.matricula = profesional.matricula where activo=1 and idcuota = " + idcuota;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    ids.add(resultado.getInt("matricula"));
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return ids;
+    
+    }
 
     public static String actualizarObras(ArrayList<Integer> ids, int matricula) {
         

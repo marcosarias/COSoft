@@ -45,7 +45,7 @@ public class ListadoCuotasProfesional extends javax.swing.JDialog {
 
     private void llenarTodo() {
                 
-        ids = ControladorProfesional.getObrasProfesional(matricula);
+        ids = ControladorProfesional.getCuotasProfesional(matricula);
         tipoCuotas = new ArrayList<>();
         ControladorTipoCuota.getTipos(tipoCuotas);
         

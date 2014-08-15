@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.ConceptoCuentaCorriente;
 import modelo.Conexion;
 import modelo.Factura;
 import modelo.Material;
@@ -43,6 +44,53 @@ public class ControladorRecibo {
                     recibo.setImporte(resultado.getFloat("importe"));
                     recibo.setNombre(resultado.getString("nombre"));
                     recibos.add(recibo);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
+    public static String cobrarDebitos(ArrayList<ConceptoCuentaCorriente> conceptos, float importe, int matricula, String nroRecibo, String fecha){
+    
+        String consultaSQL = "";
+        consultaSQL += "INSERT INTO recibo (nrecibo, matricula, fecha, importe) VALUES (\"" + nroRecibo + "\", " + matricula + ", \"" + fecha + "\", " + importe + ");";
+        
+        for(ConceptoCuentaCorriente concepto : conceptos){
+        
+            consultaSQL += "UPDATE cuentacuotas SET idrecibo = '" + nroRecibo + "' where idcuentacuotas = " + concepto.getId() + ";";
+        
+        }
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+    
+    }
+    
+    public static void obtenerDetallesRecibo(ArrayList<ConceptoCuentaCorriente> conceptos, String nroRecibo){
+    
+        try {
+            String consultaSQL = "SELECT nombre, importe, idfactura FROM vistacuentacorriente where idrecibo = '" + nroRecibo + "'";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    ConceptoCuentaCorriente concepto = new ConceptoCuentaCorriente();
+                    concepto.setIdfactura(resultado.getString("idfactura"));
+                    concepto.setDetalle(resultado.getString("nombre"));
+                    concepto.setImporte(resultado.getFloat("importe"));
+                    conceptos.add(concepto);
                     
                 }
             
