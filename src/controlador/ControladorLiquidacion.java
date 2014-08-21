@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.ConceptoLiquidacion;
-import modelo.Conexion;
+import utilidades.Conexion;
 import modelo.DetalleLiquidacion;
 import modelo.Liquidacion;
 

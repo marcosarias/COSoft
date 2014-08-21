@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.ConceptoCuentaCorriente;
-import modelo.Conexion;
+import utilidades.Conexion;
 import modelo.Factura;
 import modelo.Material;
 import modelo.Recibo;

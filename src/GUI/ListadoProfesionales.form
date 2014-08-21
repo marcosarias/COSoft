@@ -32,14 +32,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemVerCuotasActionPerformed"/>
           </Events>
         </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="jMenuItemVerLibrosEquip">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Ver cuotas pendientes"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemVerLibrosEquipActionPerformed"/>
-          </Events>
-        </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItemAsignar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Generar cuota"/>

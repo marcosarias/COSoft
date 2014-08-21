@@ -4,6 +4,7 @@
  */
 package controlador;
 
+import utilidades.Conexion;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

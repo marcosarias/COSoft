@@ -108,7 +108,6 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         jMenuItemVerCuentaCorriente = new javax.swing.JMenuItem();
         jMenuItemVerObras = new javax.swing.JMenuItem();
         jMenuItemVerCuotas = new javax.swing.JMenuItem();
-        jMenuItemVerLibrosEquip = new javax.swing.JMenuItem();
         jMenuItemAsignar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemEditar = new javax.swing.JMenuItem();
@@ -148,14 +147,6 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             }
         });
         jPopupMenu1.add(jMenuItemVerCuotas);
-
-        jMenuItemVerLibrosEquip.setText("Ver cuotas pendientes");
-        jMenuItemVerLibrosEquip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemVerLibrosEquipActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(jMenuItemVerLibrosEquip);
 
         jMenuItemAsignar.setText("Generar cuota");
         jMenuItemAsignar.addActionListener(new java.awt.event.ActionListener() {
@@ -382,10 +373,6 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         form.setVisible(true);
     }//GEN-LAST:event_jMenuItemVerCuotasActionPerformed
 
-    private void jMenuItemVerLibrosEquipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerLibrosEquipActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItemVerLibrosEquipActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         String buscar = this.BuscarProfesionalTextField.getText();
@@ -428,7 +415,6 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     private javax.swing.JMenuItem jMenuItemEliminar;
     private javax.swing.JMenuItem jMenuItemVerCuentaCorriente;
     private javax.swing.JMenuItem jMenuItemVerCuotas;
-    private javax.swing.JMenuItem jMenuItemVerLibrosEquip;
     private javax.swing.JMenuItem jMenuItemVerObras;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

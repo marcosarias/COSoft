@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package modelo;
+package utilidades;
 
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,17 +16,20 @@ import java.util.logging.Logger;
 
 public class Conexion {
     
-    final String base = "cosoft";
-    final String usuario = "root";
-    final String passwd = "root";
-    final String url = "jdbc:mysql://localhost:3306/" + base + "?allowMultiQueries=true";
     Connection conn = null;
     Statement consulta;
     
     public void Conectar() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn=(Connection) DriverManager.getConnection(url, usuario, passwd);
+            Config cfg = null;
+            try {
+                cfg = Xml.cargar("config.xml");
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String url = "jdbc:mysql://" + cfg.getIP() + ":3306/" + cfg.getSchema() + "?allowMultiQueries=true";;
+            conn=(Connection) DriverManager.getConnection(url, cfg.getUser(), cfg.getPass());
             consulta = (Statement) conn.createStatement();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);

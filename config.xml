@@ -1,0 +1,6 @@
+<utilidades.Config>
+	<IP>localhost</IP>
+	<user>root</user>
+	<schema>cosoft</schema>
+	<pass></pass>
+</utilidades.Config>

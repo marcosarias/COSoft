@@ -24,9 +24,8 @@ public class Odontoguachos {
                 
         setLookAndFeel();
         FormularioPrincipal mf = new FormularioPrincipal();
-        mf.requestFocus();
         mf.setVisible(true);
-        mf.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //mf.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         mf.setLocationRelativeTo(null);
         mf.setResizable(true);
         mf.setTitle("COSoft");

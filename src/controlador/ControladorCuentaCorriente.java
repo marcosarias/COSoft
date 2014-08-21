@@ -13,8 +13,9 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.ConceptoCuentaCorriente;
-import modelo.Conexion;
+import utilidades.Conexion;
 import modelo.CuentaCuotas;
+import modelo.Debito;
 
 /**
  *
@@ -149,4 +150,33 @@ public class ControladorCuentaCorriente {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     
+    public static void obtenerDebitos(ArrayList<Debito> debitos, String fecha){
+    
+        try {
+            String consultaSQL = "select idcuentacuotas, cuentacuotas.matricula, nombre, telefonos, direccion, sum(importe) as montototal from cuentacuotas inner join profesional on cuentacuotas.matricula = profesional.matricula where fechadebito < '" + fecha + "' and idrecibo is null group by cuentacuotas.matricula";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                    
+                Debito debito = new Debito();
+                debito.setMatricula(resultado.getInt("matricula"));
+                debito.setDireccion(resultado.getString("direccion"));
+                debito.setNombre(resultado.getString("nombre"));
+                debito.setTelefonos(resultado.getString("telefonos"));
+                debito.setMontototal(resultado.getFloat("montototal"));
+                debitos.add(debito);
+                    
+            }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
+    
 }

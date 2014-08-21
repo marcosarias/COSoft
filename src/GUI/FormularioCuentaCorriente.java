@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.ConceptoCuentaCorriente;
 import modelo.Material;
+import modelo.RenglonCuentaCorriente;
 
 /**
  *
@@ -29,8 +30,10 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
 
     int id;
     String filtro;
-    
+      
     Boolean deboRefrescar;
+    
+    ArrayList<RenglonCuentaCorriente> renglones;
     
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
@@ -50,6 +53,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
         
         conceptos = new ArrayList<>();
+        renglones = new ArrayList<>();
         
         deboRefrescar = false;
         
@@ -62,7 +66,36 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 int row = table.rowAtPoint(p);
                 if (me.getClickCount() == 2) {
                     
-                    //your code here
+                    RenglonCuentaCorriente renglon = renglones.get(row);
+                    switch (renglon.getTipo()){
+                    
+                        case RenglonCuentaCorriente.FACTURA: {
+                        
+                            if(renglon.getIdFactura() != null){
+                                FormularioFactura form = new FormularioFactura(renglon.getIdFactura());
+                                form.setVisible(true);
+                            }
+                            break;
+                        
+                        }
+                        
+                        case RenglonCuentaCorriente.RECIBO: {
+                        
+                            if(renglon.getIdRecibo() != null){
+                                FormularioRecibo form = new FormularioRecibo(renglon.getIdRecibo());
+                                form.setVisible(true);
+                            }
+                            break;
+                        
+                        }
+                        
+                        case RenglonCuentaCorriente.LIQUIDACION: {
+                        
+                            break;
+                        
+                        }
+                    
+                    }
                     
                 }
             }
@@ -338,13 +371,19 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                     modelo.addRow(data);
                     saldo += concepto.getImporte();
                     
+                    renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                    
                 }
                 else{       //PAGO EFECTIVO, solo al comprar materiales
                 
                     Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                     modelo.addRow(data);
+                    
                     Object[] data2 = { "", "Recibo: " + concepto.getIdrecibo(), 0, concepto.getImporte(), "" };  //HABER
                     modelo.addRow(data2);
+                    
+                    renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                    renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.RECIBO, concepto.getIdrecibo()));
                 
                 }
             
@@ -356,6 +395,9 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 
                 Object[] data2 = { "", "Liquidación: " + concepto.getNombreliquidacion(), 0, concepto.getImporte() , "" };  //HABER
                 modelo.addRow(data2);
+                
+                renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.LIQUIDACION, concepto.getIdliquidacion()));
             
             }
             

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.Conexion;
+import utilidades.Conexion;
 import modelo.Material;
 
 /**
