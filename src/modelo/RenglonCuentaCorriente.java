@@ -15,15 +15,19 @@ public class RenglonCuentaCorriente {
     public static final int FACTURA = 0;
     public static final int RECIBO = 1;
     public static final int LIQUIDACION = 2;
+    public static final int CONDONACION = 3;
     
+    private int idDebito;
     private String idFactura;
     private String idRecibo;
     private int idLiquidacion;
+    private int idCondonacion;
     private int tipo;
 
-    public RenglonCuentaCorriente(int tipo, String id){
+    public RenglonCuentaCorriente(int idDebito, int tipo, String id){
     
         this.tipo = tipo;
+        this.idDebito = idDebito;
         if(tipo == RECIBO)
             this.idRecibo = id;
         else if(tipo == FACTURA)
@@ -31,10 +35,14 @@ public class RenglonCuentaCorriente {
     
     }
     
-    public RenglonCuentaCorriente(int tipo, int id){
+    public RenglonCuentaCorriente(int idDebito, int tipo, int id){
     
         this.tipo = tipo;
-        idLiquidacion = id;
+        this.idDebito = idDebito;
+        if(tipo == LIQUIDACION)
+            this.idLiquidacion = id;
+        else if(tipo == CONDONACION)
+                this.idCondonacion = id;
     
     }
 
@@ -92,6 +100,20 @@ public class RenglonCuentaCorriente {
      */
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    /**
+     * @return the idDebito
+     */
+    public int getIdDebito() {
+        return idDebito;
+    }
+
+    /**
+     * @param idDebito the idDebito to set
+     */
+    public void setIdDebito(int idDebito) {
+        this.idDebito = idDebito;
     }
     
 }

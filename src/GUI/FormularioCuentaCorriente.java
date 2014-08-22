@@ -19,8 +19,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.ConceptoCuentaCorriente;
+import modelo.Condonacion;
 import modelo.Material;
 import modelo.RenglonCuentaCorriente;
+import utilidades.Fecha;
+import utilidades.Mensaje;
 
 /**
  *
@@ -39,6 +42,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
     
     ArrayList<ConceptoCuentaCorriente> conceptos;
+    ArrayList<Condonacion> condonaciones;
     
     /**
      * Creates new form FormularioCuentaCorriente
@@ -53,6 +57,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
         
         conceptos = new ArrayList<>();
+        condonaciones = new ArrayList<>();
         renglones = new ArrayList<>();
         
         deboRefrescar = false;
@@ -100,6 +105,28 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 }
             }
             
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                
+                if (me.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+                
+                    JTable table =(JTable) me.getSource();
+                    Point p = me.getPoint();
+                    int row = table.rowAtPoint(p);
+
+                    if (row >= 0 && row < table.getRowCount()) {
+                        table.setRowSelectionInterval(row, row);
+                    } else {
+                        table.clearSelection();
+                    }
+                
+                    if(renglones.get(row).getTipo() == RenglonCuentaCorriente.FACTURA && renglones.get(row).getIdFactura() == null)
+                        jPopupMenu1.show(me.getComponent(), me.getX(), me.getY());
+                    
+                }
+                
+            }
+            
         });
         
         addWindowFocusListener(this);
@@ -128,6 +155,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItemCondonar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -144,6 +173,14 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+
+        jMenuItemCondonar.setText("Condonar débito");
+        jMenuItemCondonar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCondonarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemCondonar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -225,10 +262,10 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addGap(48, 48, 48))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -328,6 +365,14 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jMenuItemCondonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCondonarActionPerformed
+        
+        deboRefrescar = true;
+        CondonarDebito form = new CondonarDebito(renglones.get(jTable1.getSelectedRow()).getIdDebito());
+        form.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItemCondonarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
@@ -338,7 +383,9 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenuItem jMenuItemCondonar;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner jSpinner1;
@@ -356,8 +403,10 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         }
         
         conceptos.clear();
+        condonaciones.clear();
         
         ControladorCuentaCorriente.obtenerCuotas(conceptos, id, filtro);
+        ControladorCuentaCorriente.obtenerCondonaciones(condonaciones, id);
         
         float saldo = 0;
         
@@ -371,7 +420,19 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                     modelo.addRow(data);
                     saldo += concepto.getImporte();
                     
-                    renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                    renglones.add(new RenglonCuentaCorriente(concepto.getId(), RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                    for(Condonacion c : condonaciones){
+                    
+                        if(c.getIdCuota() == concepto.getId()){
+                         
+                            Object[] data2 = { "", "Condonada el " + Fecha.invertirFecha(c.getFecha()), 0, concepto.getImporte(), "" };  //HABER
+                            modelo.addRow(data2);
+                            renglones.add(new RenglonCuentaCorriente(concepto.getId(), RenglonCuentaCorriente.CONDONACION, concepto.getIdfactura()));
+                            saldo -= concepto.getImporte();
+                            
+                        }
+                    
+                    }
                     
                 }
                 else{       //PAGO EFECTIVO, solo al comprar materiales
@@ -382,8 +443,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                     Object[] data2 = { "", "Recibo: " + concepto.getIdrecibo(), 0, concepto.getImporte(), "" };  //HABER
                     modelo.addRow(data2);
                     
-                    renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
-                    renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.RECIBO, concepto.getIdrecibo()));
+                    renglones.add(new RenglonCuentaCorriente(concepto.getId(), RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                    renglones.add(new RenglonCuentaCorriente(concepto.getId(), RenglonCuentaCorriente.RECIBO, concepto.getIdrecibo()));
                 
                 }
             
@@ -396,8 +457,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 Object[] data2 = { "", "Liquidación: " + concepto.getNombreliquidacion(), 0, concepto.getImporte() , "" };  //HABER
                 modelo.addRow(data2);
                 
-                renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
-                renglones.add(new RenglonCuentaCorriente(RenglonCuentaCorriente.LIQUIDACION, concepto.getIdliquidacion()));
+                renglones.add(new RenglonCuentaCorriente(concepto.getId(), RenglonCuentaCorriente.FACTURA, concepto.getIdfactura()));
+                renglones.add(new RenglonCuentaCorriente(concepto.getId(), RenglonCuentaCorriente.LIQUIDACION, concepto.getIdliquidacion()));
             
             }
             

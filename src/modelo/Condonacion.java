@@ -13,7 +13,6 @@ package modelo;
 public class Condonacion {
     
     private int id;
-    private int matricula;
     private int idCuota;
     private String fecha;
 
@@ -29,20 +28,6 @@ public class Condonacion {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * @return the matricula
-     */
-    public int getMatricula() {
-        return matricula;
-    }
-
-    /**
-     * @param matricula the matricula to set
-     */
-    public void setMatricula(int matricula) {
-        this.matricula = matricula;
     }
 
     /**

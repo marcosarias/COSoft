@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.ConceptoCuentaCorriente;
+import modelo.Condonacion;
 import utilidades.Conexion;
 import modelo.CuentaCuotas;
 import modelo.Debito;
@@ -34,6 +35,7 @@ public class ControladorCuentaCorriente {
             while(resultado.next()){
                 
                     ConceptoCuentaCorriente concepto = new ConceptoCuentaCorriente();
+                    concepto.setId(resultado.getInt("id"));
                     concepto.setMes(resultado.getInt("mes"));
                     concepto.setAnio(resultado.getInt("anio"));
                     concepto.setImporte(resultado.getFloat("importe"));
@@ -178,5 +180,52 @@ public class ControladorCuentaCorriente {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
+    
+    public static String condonarDebito(int idDebito, String fecha){
+        
+        StringBuilder sqlbuild = new StringBuilder();
+        sqlbuild.append("INSERT INTO condonaciones (cuota, fecha) VALUES (");
+        sqlbuild.append(idDebito);
+        sqlbuild.append(", \"");
+        sqlbuild.append(fecha);
+        sqlbuild.append("\")");
+        
+        String consultaSQL = sqlbuild.toString();
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarSentenciaSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+    
+    }    
+
+    public static void obtenerCondonaciones(ArrayList<Condonacion> condonaciones, int matricula) {
+        
+        try {
+            String consultaSQL = "select idcondonaciones, cuota, fecha, matricula from condonaciones inner join cuentacuotas on condonaciones.cuota = cuentacuotas.idcuentacuotas where matricula = " + matricula;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                    
+                Condonacion condonacion = new Condonacion();
+                condonacion.setId(resultado.getInt("idcondonaciones"));
+                condonacion.setIdCuota(resultado.getInt("cuota"));
+                condonacion.setFecha(resultado.getString("fecha"));
+                condonaciones.add(condonacion);
+                    
+            }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
 }
