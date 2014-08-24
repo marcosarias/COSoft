@@ -9,6 +9,7 @@ package controlador;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,8 @@ import modelo.Condonacion;
 import utilidades.Conexion;
 import modelo.CuentaCuotas;
 import modelo.Debito;
+import modelo.Material;
+import utilidades.Fecha;
 
 /**
  *
@@ -39,7 +42,9 @@ public class ControladorCuentaCorriente {
                     concepto.setMes(resultado.getInt("mes"));
                     concepto.setAnio(resultado.getInt("anio"));
                     concepto.setImporte(resultado.getFloat("importe"));
-                    concepto.setDetalle(resultado.getString("nombre"));
+                    if(resultado.getString("descripcion") == null)
+                        concepto.setDetalle(resultado.getString("nombre"));
+                    else concepto.setDetalle(resultado.getString("nombre") + " - " +resultado.getString("descripcion"));
                     concepto.setFecha(resultado.getString("fecha"));
                     concepto.setIdliquidacion(resultado.getInt("idliquidacion"));
                     concepto.setIdrecibo(resultado.getString("idrecibo"));
@@ -225,6 +230,58 @@ public class ControladorCuentaCorriente {
         } catch (SQLException ex) {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+    }
+
+    public static String generarCuotasAFuturo(int matricula, String fecha, int cantidad, float importe, String descripcion) {
+        
+        String fechas[] = Fecha.getFechasInvertidas(fecha, cantidad);
+        
+        String consultaSQL = "";
+        
+        for(int i = 0; i < cantidad; i++){
+        
+            consultaSQL += "INSERT INTO cuentacuotas (matricula, idcuota, importe, fechadebito, descripcion) VALUES (" + matricula + ", 2, " + importe + ", \"" + fechas[i] + "\", \"" + descripcion + "\");";
+        
+        }
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+        
+    }
+    
+    public static void obtenerCuotasAFuturo(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula, String fecha){
+    
+        try {
+            String consultaSQL = "SELECT * FROM vistacuentacorriente where matricula = " + matricula + " AND fecha > '" + fecha + "'";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            while(resultado.next()){
+                
+                    ConceptoCuentaCorriente concepto = new ConceptoCuentaCorriente();
+                    concepto.setId(resultado.getInt("id"));
+                    concepto.setImporte(resultado.getFloat("importe"));
+                    concepto.setFecha(resultado.getString("fecha"));
+                    if(resultado.getString("descripcion") == null)
+                        concepto.setDetalle(resultado.getString("nombre"));
+                    else concepto.setDetalle(resultado.getString("nombre") + " - " +resultado.getString("descripcion"));
+                    conceptos.add(concepto);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+                             
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Collections.sort(conceptos);
         
     }
     

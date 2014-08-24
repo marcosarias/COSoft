@@ -68,7 +68,7 @@ public class ControladorTipoCuota {
     public static void getTipos(ArrayList<TipoCuota> tipos){
                 
         try {
-            String consultaSQL = "SELECT * FROM tipocuota where idcuota <> 1";
+            String consultaSQL = "SELECT * FROM tipocuota where idcuota NOT IN (1, 2)";
             
             Conexion conexion = new Conexion();
             conexion.Conectar();

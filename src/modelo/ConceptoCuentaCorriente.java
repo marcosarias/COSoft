@@ -141,7 +141,7 @@ public class ConceptoCuentaCorriente implements Comparable<ConceptoCuentaCorrien
     @Override
     public int compareTo(ConceptoCuentaCorriente o) {
         
-        return fecha.compareTo(o.getFecha());
+        return fecha.compareTo(o.getFecha())*-1;
         
     }
 

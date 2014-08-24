@@ -15,7 +15,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.SpinnerDateModel;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.ConceptoCuentaCorriente;
@@ -131,9 +134,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         
         addWindowFocusListener(this);
         
-        jSpinner2.setValue(Calendar.getInstance().get(Calendar.YEAR));
-        jComboBox3.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
-        filtro = "";
+        filtro = " AND fecha <= '" + Fecha.getFechaFromJSpinner((Date)jSpinner4.getModel().getValue()) + "'";
 
     }
     
@@ -164,14 +165,15 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jSpinner1 = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jSpinner2 = new javax.swing.JSpinner();
-        jComboBox3 = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        Date date = new Date();
+        SpinnerDateModel sm = new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH);
+        jSpinner3 = new javax.swing.JSpinner(sm);
+        SpinnerDateModel sm2 = new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH);
+        jSpinner4 = new javax.swing.JSpinner(sm2);
         jButton4 = new javax.swing.JButton();
 
         jMenuItemCondonar.setText("Condonar débito");
@@ -211,6 +213,13 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
+        }
 
         jTextField1.setEditable(false);
 
@@ -218,15 +227,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(2004, 2004, 2050, 1));
-
         jLabel3.setText("Desde");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
-
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(2004, 2004, 2050, 1));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
         jLabel6.setText("Hasta");
 
@@ -244,6 +245,12 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
             }
         });
 
+        JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner3, "dd-MM-yyyy");
+        jSpinner3.setEditor(de);
+
+        JSpinner.DateEditor de2 = new JSpinner.DateEditor(jSpinner4, "dd-MM-yyyy");
+        jSpinner4.setEditor(de2);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -252,34 +259,28 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -315,7 +316,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
@@ -344,8 +345,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         
-        //filtro = "  and Concat(anio,mes) >= " + String.valueOf(jSpinner1.getValue()) + String.valueOf((jComboBox2.getSelectedIndex() + 1)) + " and Concat(anio,mes) <= " + String.valueOf(jSpinner2.getValue()) + (jComboBox3.getSelectedIndex() + 1);
-        filtro = " and fecha >= '" + String.valueOf(jSpinner1.getValue()) + "-" + String.valueOf((jComboBox2.getSelectedIndex() + 1)) + "-31' AND fecha >= '" + String.valueOf(jSpinner2.getValue()) + "-" + (jComboBox3.getSelectedIndex() + 1) + "-1'";
+        filtro = " and fecha >= '" + Fecha.getFechaFromJSpinner((Date)jSpinner3.getModel().getValue()) + "' AND fecha <= '" + Fecha.getFechaFromJSpinner((Date)jSpinner4.getModel().getValue()) + "'";
         llenarTodo();
         
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -360,7 +360,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        filtro = "";
+        filtro = " where fecha <= '" + Fecha.getFechaFromJSpinner((Date)jSpinner4.getModel().getValue()) + "'";
         llenarTodo();
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -377,8 +377,6 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -388,8 +386,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
+    private javax.swing.JSpinner jSpinner3;
+    private javax.swing.JSpinner jSpinner4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
@@ -404,6 +402,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         
         conceptos.clear();
         condonaciones.clear();
+        renglones.clear();
         
         ControladorCuentaCorriente.obtenerCuotas(conceptos, id, filtro);
         ControladorCuentaCorriente.obtenerCondonaciones(condonaciones, id);
@@ -416,7 +415,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
             
                 if(concepto.getIdrecibo() == null){
                     
-                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
+                    Object[] data = { Fecha.invertirFecha(concepto.getFecha()), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                     modelo.addRow(data);
                     saldo += concepto.getImporte();
                     
@@ -437,7 +436,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 }
                 else{       //PAGO EFECTIVO, solo al comprar materiales
                 
-                    Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
+                    Object[] data = { Fecha.invertirFecha(concepto.getFecha()), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                     modelo.addRow(data);
                     
                     Object[] data2 = { "", "Recibo: " + concepto.getIdrecibo(), 0, concepto.getImporte(), "" };  //HABER
@@ -451,7 +450,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
             }
             else{
             
-                Object[] data = { concepto.getFecha(), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
+                Object[] data = { Fecha.invertirFecha(concepto.getFecha()), concepto.getDetalle(), concepto.getImporte(), 0 , concepto.getIdfactura() };  //DEBE
                 modelo.addRow(data);
                 
                 Object[] data2 = { "", "Liquidación: " + concepto.getNombreliquidacion(), 0, concepto.getImporte() , "" };  //HABER

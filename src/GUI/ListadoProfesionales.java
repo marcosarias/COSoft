@@ -108,6 +108,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         jMenuItemVerCuentaCorriente = new javax.swing.JMenuItem();
         jMenuItemVerObras = new javax.swing.JMenuItem();
         jMenuItemVerCuotas = new javax.swing.JMenuItem();
+        jMenuItemVentaCuotas = new javax.swing.JMenuItem();
+        jMenuItemCuotasPendientes = new javax.swing.JMenuItem();
         jMenuItemAsignar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemEditar = new javax.swing.JMenuItem();
@@ -147,6 +149,22 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             }
         });
         jPopupMenu1.add(jMenuItemVerCuotas);
+
+        jMenuItemVentaCuotas.setText("Generar venta cuotas");
+        jMenuItemVentaCuotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemVentaCuotasActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemVentaCuotas);
+
+        jMenuItemCuotasPendientes.setText("Ver cuotas pendientes");
+        jMenuItemCuotasPendientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCuotasPendientesActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemCuotasPendientes);
 
         jMenuItemAsignar.setText("Generar cuota");
         jMenuItemAsignar.addActionListener(new java.awt.event.ActionListener() {
@@ -280,14 +298,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
-            jTable1.getColumnModel().getColumn(6).setResizable(false);
-            jTable1.getColumnModel().getColumn(7).setResizable(false);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTable1.getColumnModel().getColumn(7).setPreferredWidth(20);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -304,12 +316,12 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 226, Short.MAX_VALUE))
+                        .addGap(0, 436, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 907, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -403,6 +415,20 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jMenuItemVentaCuotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVentaCuotasActionPerformed
+        
+        FormularioMaterialesExternos form = new FormularioMaterialesExternos(profesionales.get(jTable1.getSelectedRow()).getMatricula());
+        form.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItemVentaCuotasActionPerformed
+
+    private void jMenuItemCuotasPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCuotasPendientesActionPerformed
+        
+        ListadoMaterialesExternos form = new ListadoMaterialesExternos(profesionales.get(jTable1.getSelectedRow()).getMatricula());
+        form.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItemCuotasPendientesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BuscarProfesionalTextField;
     private javax.swing.JButton jButton1;
@@ -411,8 +437,10 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JMenuItem jMenuItemAsignar;
+    private javax.swing.JMenuItem jMenuItemCuotasPendientes;
     private javax.swing.JMenuItem jMenuItemEditar;
     private javax.swing.JMenuItem jMenuItemEliminar;
+    private javax.swing.JMenuItem jMenuItemVentaCuotas;
     private javax.swing.JMenuItem jMenuItemVerCuentaCorriente;
     private javax.swing.JMenuItem jMenuItemVerCuotas;
     private javax.swing.JMenuItem jMenuItemVerObras;

@@ -94,7 +94,7 @@ public class CondonarDebito extends javax.swing.JDialog {
         
         String resultado = ControladorCuentaCorriente.condonarDebito(idDebito, Fecha.invertirFecha(jTextField1.getText()));
         if(resultado.equals("")){  //No hubo error
-            Mensaje.mostrarMensaje(rootPane, "Débito condonada con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+            Mensaje.mostrarMensaje(rootPane, "Débito condonado con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         }
         else Mensaje.mostrarMensaje(rootPane, "Error al condonar débito:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);

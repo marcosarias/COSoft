@@ -6,7 +6,9 @@
 
 package utilidades;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -17,14 +19,16 @@ public class Fecha {
     public static String getFechaActual(){
     
         Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.DAY_OF_MONTH) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.YEAR);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(calendar.getTime());
     
     }
     
     public static String getFechaActualInvertida(){
     
         Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(calendar.getTime());
     
     }
     
@@ -32,7 +36,8 @@ public class Fecha {
     
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, meses);
-        return calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(calendar.getTime());
     
     }
     
@@ -40,6 +45,34 @@ public class Fecha {
     
         String[] aux = fecha.split("-");
         return aux[2] + "-" + aux[1] + "-" + aux[0];
+    
+    }
+    
+    public static String[] getFechasInvertidas(String fecha, int cantidad){
+    
+        String[] fechas = new String[cantidad];
+        Calendar calendar = Calendar.getInstance();
+        String[] aux = fecha.split("-");
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(aux[2]));
+        calendar.set(Calendar.MONTH, Integer.parseInt(aux[1]) - 1);
+        calendar.set(Calendar.YEAR, Integer.parseInt(aux[0]));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                
+        for(int i = 0; i < cantidad; i++){
+        
+            fechas[i] = sdf.format(calendar.getTime());
+            calendar.add(Calendar.MONTH, 1);
+        
+        }
+        
+        return fechas;
+    
+    }
+    
+    public static String getFechaFromJSpinner(Date date){
+    
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
     
     }
     
