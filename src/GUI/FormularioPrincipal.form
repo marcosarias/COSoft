@@ -138,7 +138,7 @@
         <Component class="javax.swing.JButton" name="jButton11">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/liquidaciones.png"/>
+              <Image iconType="3" name="/iconos/facturas.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Facturas"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -152,7 +152,7 @@
         <Component class="javax.swing.JButton" name="jButton12">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/liquidaciones.png"/>
+              <Image iconType="3" name="/iconos/recibos.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Recibos"/>
             <Property name="focusable" type="boolean" value="false"/>

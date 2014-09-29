@@ -140,7 +140,7 @@ public class FormularioPrincipal extends javax.swing.JFrame implements WindowFoc
         });
         jToolBar1.add(jButton10);
 
-        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/liquidaciones.png"))); // NOI18N
+        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/facturas.png"))); // NOI18N
         jButton11.setText("Facturas");
         jButton11.setFocusable(false);
         jButton11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -152,7 +152,7 @@ public class FormularioPrincipal extends javax.swing.JFrame implements WindowFoc
         });
         jToolBar1.add(jButton11);
 
-        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/liquidaciones.png"))); // NOI18N
+        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/recibos.png"))); // NOI18N
         jButton12.setText("Recibos");
         jButton12.setFocusable(false);
         jButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
