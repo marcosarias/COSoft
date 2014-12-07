@@ -208,6 +208,10 @@ public class GenerarCuota extends javax.swing.JDialog {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        String s = jTextField1.getText();
+        if(s.contains("-"))
+            jTextField1.setText(Formato.darFormatoFactura(s));
+        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de factura", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jTextField1FocusLost
 
     private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost

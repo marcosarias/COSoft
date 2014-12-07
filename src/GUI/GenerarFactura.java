@@ -7,6 +7,7 @@
 package GUI;
 
 import controlador.ControladorCuentaCorriente;
+import controlador.ControladorFactura;
 import controlador.ControladorRecibo;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -23,7 +24,7 @@ import utilidades.Mensaje;
  *
  * @author COCO
  */
-public class CobrarDebitos extends javax.swing.JDialog {
+public class GenerarFactura extends javax.swing.JDialog {
 
     ArrayList<ConceptoCuentaCorriente> conceptos;
     
@@ -36,7 +37,7 @@ public class CobrarDebitos extends javax.swing.JDialog {
      * Creates new form CobrarDebitos
      * @param matricula
      */
-    public CobrarDebitos(int matricula) {
+    public GenerarFactura(int matricula) {
         initComponents();
         setModal(true);
         setLocationRelativeTo(null);
@@ -51,7 +52,7 @@ public class CobrarDebitos extends javax.swing.JDialog {
         
         llenarTodo();
         
-        jTextField3.setText(Fecha.getFechaActual());
+        fechatxt.setText(Fecha.getFechaActual());
         
     }
 
@@ -66,12 +67,12 @@ public class CobrarDebitos extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        montotxt = new javax.swing.JTextField();
+        facturartxt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
+        fechatxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -81,7 +82,7 @@ public class CobrarDebitos extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Fecha", "Detalle", "Importe", "Cobrar"
+                "Fecha", "Detalle", "Importe", "Facturar"
             }
         ) {
             Class[] types = new Class [] {
@@ -106,31 +107,31 @@ public class CobrarDebitos extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jTextField1.setText("0.0");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        montotxt.setText("0.0");
+        montotxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                montotxtActionPerformed(evt);
             }
         });
 
-        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+        facturartxt.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextField2FocusLost(evt);
+                facturartxtFocusLost(evt);
             }
         });
 
         jLabel1.setText("Monto total");
 
-        jLabel2.setText("Nro recibo");
+        jLabel2.setText("Nro factura");
 
-        jButton1.setText("Cobrar");
+        jButton1.setText("Generar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Fecha recibo");
+        jLabel3.setText("Fecha factura");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,9 +153,9 @@ public class CobrarDebitos extends javax.swing.JDialog {
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField2))))))
+                                    .addComponent(fechatxt, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                                    .addComponent(montotxt)
+                                    .addComponent(facturartxt))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -164,15 +165,15 @@ public class CobrarDebitos extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(montotxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(facturartxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fechatxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -192,16 +193,16 @@ public class CobrarDebitos extends javax.swing.JDialog {
             i++;
         }
         
-        jTextField1.setText(String.valueOf(saldo));
+        montotxt.setText(String.valueOf(saldo));
         
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        String recibo = jTextField2.getText();
-        if(!recibo.equals("")){
+        String factura = facturartxt.getText();
+        if(!factura.equals("")){
         
-            if(recibo.contains("-")){
+            if(factura.contains("-")){
                 
                 ArrayList<ConceptoCuentaCorriente> nuevos = new ArrayList<>();
                 int i = 0;
@@ -210,46 +211,45 @@ public class CobrarDebitos extends javax.swing.JDialog {
                         nuevos.add(concepto);
                     i++;
                 }
-                jTextField2.setText(Formato.darFormatoFactura(recibo));
-                if(!jTextField1.getText().equals("0.0")){
-                    String resultado = ControladorRecibo.cobrarDebitos(nuevos, Float.parseFloat(jTextField1.getText()), matricula, jTextField2.getText(), Fecha.invertirFecha(jTextField3.getText()));
+                facturartxt.setText(Formato.darFormatoFactura(factura));
+                if(!montotxt.getText().equals("0.0")){
+                    String resultado = ControladorFactura.generarFactura(nuevos, Float.parseFloat(montotxt.getText()), matricula, facturartxt.getText(), Fecha.invertirFecha(fechatxt.getText()));
                     if(resultado.equals("")){  //No hubo error
-                        Mensaje.mostrarMensaje(rootPane, "Debitos cobrados con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                        Mensaje.mostrarMensaje(rootPane, "Facturas generadas con exito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     }
                     else Mensaje.mostrarMensaje(rootPane, "Error al cobrar los debitos:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
-                
                 }
                 else Mensaje.mostrarMensaje(rootPane, "Error monto incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-                
+            
             }
-            else Mensaje.mostrarMensaje(rootPane, "Formato de nro de recibo invalido", "Error", JOptionPane.ERROR_MESSAGE);
+            else Mensaje.mostrarMensaje(rootPane, "Formato de nro de factura invalido", "Error", JOptionPane.ERROR_MESSAGE);
         
         }
-        else Mensaje.mostrarMensaje(rootPane, "Ingrese un numero de recibo", "Error", JOptionPane.ERROR_MESSAGE);
+        else Mensaje.mostrarMensaje(rootPane, "Ingrese un numero de factura", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void montotxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_montotxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_montotxtActionPerformed
 
-    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
-        String s = jTextField2.getText();
+    private void facturartxtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_facturartxtFocusLost
+        String s = facturartxt.getText();
         if(s.contains("-"))
-            jTextField2.setText(Formato.darFormatoFactura(s));
-        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de recibo", "Error", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_jTextField2FocusLost
+            facturartxt.setText(Formato.darFormatoFactura(s));
+        else Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de factura", "Error", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_facturartxtFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField facturartxt;
+    private javax.swing.JTextField fechatxt;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField montotxt;
     // End of variables declaration//GEN-END:variables
 
     private void llenarTodo() {
@@ -262,7 +262,7 @@ public class CobrarDebitos extends javax.swing.JDialog {
         
         conceptos.clear();
         
-        ControladorCuentaCorriente.obtenerCuotasSinRecibo(conceptos, matricula);
+        ControladorCuentaCorriente.obtenerCuotasSinFactura(conceptos, matricula);
         
         for(ConceptoCuentaCorriente concepto : conceptos){
         

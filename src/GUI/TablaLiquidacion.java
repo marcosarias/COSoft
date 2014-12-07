@@ -6,68 +6,132 @@
 
 package GUI;
 
+import controlador.ControladorCuentaCorriente;
+import controlador.ControladorLiquidacion;
 import controlador.ControladorObraSocial;
 import controlador.ControladorProfesional;
 import controlador.ControladorTipoCuota;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowFocusListener;
+import java.io.File;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import modelo.CuentaCuotas;
 import modelo.DetalleLiquidacion;
 import modelo.Liquidacion;
 import modelo.ObraSocial;
 import modelo.Profesional;
 import modelo.TipoCuota;
+import utilidades.Excel;
+import utilidades.Mensaje;
 
 /**
  *
  * @author Viic
  */
 public class TablaLiquidacion extends javax.swing.JDialog {
-
-   // private DefaultTableModel modeloTablaLiquidacion = new DefaultTableModel();
-   // private DefaultTableColumnModel modeloColumnasLiquidacion = new DefaultTableColumnModel();
-    @SuppressWarnings("UseOfObsoleteCollectionType")
-    Vector<String> nombresColumnas = new Vector();
+    
+    // Esto está mal, Public no se vale
+    public DefaultTableModel modeloLiquidacion = new DefaultTableModel();
+    
+    File file;
+    
+    Vector<String> datosTabla = new Vector();
     private ArrayList<TipoCuota> tipoCuotas;
-    private ArrayList<DetalleLiquidacion> detalles;
-    JTable tablaLiquidacion;
+    private final ArrayList<DetalleLiquidacion> detalles;
+    private final Liquidacion liquidacion;
+    public static List<String> columnas;
+    
     
     /**
      * Creates new form Liquidacion
+     * @param idLiquidacion
      */
-    public TablaLiquidacion(Liquidacion liquidacion) {
-        this.tablaLiquidacion = new JTable();
+    public TablaLiquidacion(int idLiquidacion) {
+        
         initComponents();
         setModal(true);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
+        
+        liquidacion = ControladorLiquidacion.getLiquidacion(idLiquidacion);
+        detalles = ControladorLiquidacion.getDetallesLiquidacion(idLiquidacion);
         
         // Lleno los labels con los datos de la liquidación
-        ObraSocial obrasocial = null;
+        ObraSocial obrasocial = new ObraSocial();
         obrasocial.setIdObraSocial(liquidacion.getIdObraSocial());
         ControladorObraSocial.getDatos(obrasocial);
         this.nombreObraSocial.setText(obrasocial.getNombre());
-        
         this.importe.setText(liquidacion.getImporte());
-        
         this.fechaPago.setText(liquidacion.getFechaPago());
-        
         this.fechaRecibida.setText(liquidacion.getFechaRecibida());
         
-        // Armo la tabla y la agrego en el ScrollPane
-        llenarNombresColumnas(nombresColumnas);
-        DefaultTableModel modeloTabla = new DefaultTableModel(nombresColumnas,0);
-   
-        tablaLiquidacion.setModel(modeloTabla);
-        tablaLiquidacion.setEnabled(false);
-        this.tablaScrollPane.add(tablaLiquidacion);
+
         
-        //Lleno la tabla con el detalle de la liquidacion
-        detalles = liquidacion.getDetalles();
-        llenarTodo();
+       
+        modeloLiquidacion = (DefaultTableModel) tabla.getModel();
+         
+        tabla.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mousePressed(MouseEvent me) {
+                JTable table =(JTable) me.getSource();
+                Point p = me.getPoint();
+                int row = table.rowAtPoint(p);
+                if (me.getClickCount() == 2) {
+                    
+                    int i = tabla.getSelectedRow();
+                    int matricula = (int) tabla.getValueAt(i, 1);
+                    float valor = Float.parseFloat(tabla.getValueAt(i, tabla.getColumnCount()-1).toString()); //TODO: esto no va a funcionar
+                    System.out.println(matricula + " " + valor);
+                    ListadoLiquidacionProfesional form = new ListadoLiquidacionProfesional(matricula, valor, liquidacion.getIdLiquidacion(),i);
+                    form.setVisible(true);
+                    
+                }
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                
+                if (me.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+                
+                    JTable table =(JTable) me.getSource();
+                    Point p = me.getPoint();
+                    int row = table.rowAtPoint(p);
+
+                    if (row >= 0 && row < table.getRowCount()) {
+                        table.setRowSelectionInterval(row, row);
+                    } else {
+                        table.clearSelection();
+                    }
+                
+                    jPopupMenu1.show(me.getComponent(), me.getX(), me.getY());
+                
+                }
+                
+            }
+            
+        });
         
+        ArrayList<String> columnas = ControladorLiquidacion.getCuotas(idLiquidacion);
+        
+        if (columnas.isEmpty()){
+            // Armo un arraylist con los nombres de las cuotas vigentes
+            llenarNombresColumnas();
+            //Llena la tabla
+            llenarTodo(true);
+        }
+        else
+            llenarTodo(false);
     }
 
     /**
@@ -79,10 +143,13 @@ public class TablaLiquidacion extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jFileChooser1 = new javax.swing.JFileChooser();
         jLabelTitulo = new javax.swing.JLabel();
+        nombreObraSocial = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         Exportar = new javax.swing.JButton();
-        Imprimir = new javax.swing.JButton();
         Eliminar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -91,13 +158,25 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         fechaRecibida = new javax.swing.JLabel();
         fechaPago = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        tablaScrollPane = new javax.swing.JScrollPane();
-        nombreObraSocial = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+
+        jMenuItem1.setText("Modificar Cuotas");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
 
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelTitulo.setText("Liquidación Obra Social:");
+
+        nombreObraSocial.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        nombreObraSocial.setText("nombre Obra Social");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -109,17 +188,6 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         Exportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ExportarActionPerformed(evt);
-            }
-        });
-
-        Imprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/imprimir.png"))); // NOI18N
-        Imprimir.setText("Imprimir");
-        Imprimir.setFocusable(false);
-        Imprimir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Imprimir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Imprimir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ImprimirActionPerformed(evt);
             }
         });
 
@@ -157,7 +225,7 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                 .addComponent(importe)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fechaRecibida)
@@ -165,24 +233,18 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fechaPago)
-                .addGap(164, 164, 164)
-                .addComponent(Imprimir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Exportar)
+                .addGap(234, 234, 234)
+                .addComponent(Exportar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Eliminar, Exportar, Imprimir});
-
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Eliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Exportar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Imprimir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(Exportar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -203,27 +265,47 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Eliminar, Exportar, Imprimir});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Eliminar, Exportar});
 
-        nombreObraSocial.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        nombreObraSocial.setText("nombre Obra Social");
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Apellido y Nombre", "Matricula", "Importe Bruto", "10%"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabla.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        tabla.setPreferredSize(new java.awt.Dimension(1500, 1300));
+        jScrollPane1.setViewportView(tabla);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tablaScrollPane))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(250, 250, 250)
-                .addComponent(jLabelTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nombreObraSocial)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(250, 250, 250)
+                        .addComponent(jLabelTitulo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nombreObraSocial))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,67 +316,100 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                     .addComponent(nombreObraSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tablaScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void ExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportarActionPerformed
-        // TODO add your handling code here:
-        ListadoLiquidaciones form = new ListadoLiquidaciones();
-        form.setVisible(true);
+        
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Hoja de cálculo Excel (*.xlsx)", "xlsx");
+        jFileChooser1.setFileFilter(filter);
+        int estadoJC = jFileChooser1.showSaveDialog(null);
+        if (estadoJC == JFileChooser.APPROVE_OPTION){
+        
+            file = new File(jFileChooser1.getSelectedFile() + ".xlsx");
+
+            Thread t = new Thread(runnable, "");
+            t.start();
+        
+        }
+    
     }//GEN-LAST:event_ExportarActionPerformed
 
-    private void ImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImprimirActionPerformed
-        // TODO add your handling code here:
-        ListadoTipoCuotas form = new ListadoTipoCuotas();
-        form.setVisible(true);
-    }//GEN-LAST:event_ImprimirActionPerformed
-
+    private Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                
+                Exportar.setText("Exportando");
+                Exportar.setEnabled(false);
+                Excel.writeFile(tabla, file, jLabelTitulo.getText() + nombreObraSocial.getText(), liquidacion.getNombre());
+                Exportar.setText("Exportar");
+                Exportar.setEnabled(true);
+                JOptionPane.showMessageDialog(rootPane, file.getName() + " guardado con éxito.", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+            }
+    };
+    
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
         // TODO add your handling code here:
-        ListadoMateriales form = new ListadoMateriales();
-        form.setVisible(true);
+        int ok = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar esta liquidación?", "Atención", JOptionPane.YES_NO_OPTION);
+        
+        if(ok == JOptionPane.YES_OPTION){
+            String resultado = ControladorLiquidacion.eliminar(liquidacion.getIdLiquidacion());
+            if(resultado.equals("")){
+                Mensaje.mostrarMensaje(rootPane, "Liquidación eliminada satisfactoriamente", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+            }
+            else Mensaje.mostrarMensaje(rootPane, "Error al eliminar la liquidación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_EliminarActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        int i = tabla.getSelectedRow();
+        int matricula = (int) tabla.getValueAt(i, 1);
+        float valor = Float.parseFloat(tabla.getValueAt(i, tabla.getColumnCount()-1).toString()); //TODO: esto no va a funcionar
+        System.out.println(matricula + " " + valor);
+        ListadoLiquidacionProfesional form = new ListadoLiquidacionProfesional(matricula, valor, liquidacion.getIdLiquidacion(),i);
+        form.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Eliminar;
     private javax.swing.JButton Exportar;
-    private javax.swing.JButton Imprimir;
     private javax.swing.JLabel fechaPago;
     private javax.swing.JLabel fechaRecibida;
     private javax.swing.JLabel importe;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel nombreObraSocial;
-    private javax.swing.JScrollPane tablaScrollPane;
+    public static javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 
     
     /**
-     * Llena el vector con el que se creara el modelo de la tabla de liquidación
-     * agrega las columnas definidas por defecto (Apellido y nombre, matricula, etc)
-     * y agrega una colimna por cada nombre de cuota distinto
+     * Llena el vector con el que se creara el modeloLiquidacion de la tabla de liquidación
+ agrega las columnas definidas por defecto (Apellido y nombre, matricula, etc)
+ y agrega una columna por cada nombre de cuota distinto
      * 
-     * @param columnas 
-     */
-    private void llenarNombresColumnas(Vector<String> columnas) {
-        
-        // Agrega columnas predefinidas
-        columnas.add("Apellido y Nombre");
-        columnas.add("Matricula");
-        columnas.add("Importe Bruto");
-        columnas.add("10%"); //Esto va como cuota Esporadica?
-        
+     */  
+ private void llenarNombresColumnas() {
+        columnas = new ArrayList<>();
+
         // Agregar una columna por cada cuota existente
         tipoCuotas = new ArrayList<>();
-        ControladorTipoCuota.getTipos(tipoCuotas);
+        ControladorTipoCuota.getTiposTodos(tipoCuotas);
         String nombreTipo = "";
         for(TipoCuota tipo : tipoCuotas){
             nombreTipo = tipo.getNombre();
@@ -303,36 +418,86 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                 columnas.add(nombreTipo);
             }
         }
-        
-        
-        columnas.add("Neto a Pagar");
-        
-      //  modeloColumnasLiquidacion.addColumn(null);
-    }
 
+        columnas.add("Neto a Pagar");
+    }
+    
     /**
      * Llena la tabla de la liquidación recorriendo los detalles de la misma
      * y recorriendo los conceptos de cada detalle.
      */
-    private void llenarTodo() {
+    private void llenarTodo(Boolean nueva) {
         
-        DefaultTableModel modelo = (DefaultTableModel) tablaLiquidacion.getModel();
-        for(int i = tablaLiquidacion.getRowCount() - 1; i >= 0; i--){
-        
-            modelo.removeRow(i);
-        
-        }
        
-        for(DetalleLiquidacion detalle : detalles){
-            Profesional profesional = new Profesional();
-            profesional.setMatricula(detalle.getMatricula());
-            ControladorProfesional.getDatos(profesional);
-            String[] data = { String.valueOf(detalle.getMatricula()), profesional.getNombre(), String.valueOf(detalle.getAtributo()), String.valueOf(detalle.getAtributo()*0.10) };
-            modelo.addRow(data);
         
+        
+       // Vacio la tabla
+        for(int i = tabla.getRowCount() - 1; i >= 0; i--){
+        
+            modeloLiquidacion.removeRow(i);
+       
         }
-        
-        //nombresColumnas.add("");
-        
+        // Agrego una fila por profesional
+            
+            
+        if (detalles!=null){
+            for (DetalleLiquidacion detalle: detalles){
+                Profesional profesional = new Profesional();
+                profesional.setMatricula(detalle.getMatricula());
+                ControladorProfesional.getDatos(profesional);
+                Object[] data = { profesional.getNombre(), profesional.getMatricula(), detalle.getAtributo(), detalle.getAtributo()*0.10 };
+                modeloLiquidacion.addRow(data);
+            }
+            
+        // Agrego las columnas correspondientes a las cuotas con valor 0  
+
+           int rowCount = tabla.getRowCount();
+           Float[] valores = new Float[rowCount];
+           for (int j=0;j<rowCount;j++){
+                valores[j] = 0f;
+            }
+            
+           for (String columna:columnas){
+                modeloLiquidacion.addColumn(columna,valores );
+            }
+           
+           if (!nueva){
+               ArrayList<CuentaCuotas> cuentacuotas = new ArrayList<>();
+               for (int fila=0;fila<rowCount;fila++){
+                   for (DetalleLiquidacion detalle: detalles){
+                        ControladorCuentaCorriente.obtenerCuotasLiquidacion(cuentacuotas, detalle.getMatricula(), detalle.getIdLiquidacion());
+                        for (int columna=4;columna<modeloLiquidacion.getColumnCount();columna++){
+                            String nombreColumna = modeloLiquidacion.getColumnName(columna);
+                            Float valorColumna = 0f;
+                            for (CuentaCuotas cuenta:cuentacuotas){
+                                if(ControladorTipoCuota.getNombre(cuenta.getIdCuota()).matches(nombreColumna)){
+                                    valorColumna = valorColumna + cuenta.getImporte();
+                                }
+                            }
+                            modeloLiquidacion.setValueAt(valorColumna, fila, columna);
+                        }
+                    }
+               }
+           }
+           actualizarNeto();
+        }
+
+
+    }    
+
+
+    private void actualizarNeto() {
+        for(int i = tabla.getRowCount() - 1; i >= 0; i--){
+            
+           float neto = 0.9f * Float.parseFloat(modeloLiquidacion.getValueAt(i, 2).toString());
+           int columnCount = tabla.getColumnCount();
+    
+           for (int j=4;j<columnCount;j++){
+               neto= neto - Float.parseFloat(modeloLiquidacion.getValueAt(i, j).toString());
+            }
+            modeloLiquidacion.setValueAt(neto, i, modeloLiquidacion.getColumnCount()-1);
+           
+       
+        }
     }
 }

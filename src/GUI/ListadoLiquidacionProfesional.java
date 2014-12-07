@@ -1,0 +1,404 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package GUI;
+
+import static GUI.TablaLiquidacion.columnas;
+import static GUI.TablaLiquidacion.tabla;
+import controlador.ControladorCuentaCorriente;
+import controlador.ControladorProfesional;
+import controlador.ControladorTipoCuota;
+import controlador.TableCellListener;
+import java.awt.event.ActionEvent;
+import java.text.DateFormatSymbols;
+import java.util.ArrayList;
+import java.util.Collections;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import modelo.CuentaCuotas;
+import modelo.Profesional;
+import utilidades.Mensaje;
+
+/**
+ *
+ * @author COCO
+ */
+public class ListadoLiquidacionProfesional extends javax.swing.JDialog {
+
+    int matricula;
+    ArrayList<Integer> ids;
+    ArrayList<CuentaCuotas> cuentacuotasactual;
+    ArrayList<CuentaCuotas> cuentacuotas;
+    ArrayList<Integer> idsNuevos = new ArrayList<>();
+    int idLiquidacion; 
+    int row;
+    
+    private DefaultTableModel modelo = new DefaultTableModel();
+    private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
+    
+    /**
+     * Creates new form ListadoObrasSocialesProfesional
+     */
+    /*
+    public ListadoLiquidacionProfesional(int matricula) {
+        initComponents();
+        this.matricula = matricula;
+        setModal(true);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        modelo = (DefaultTableModel) jTable1.getModel();
+        modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
+        
+        llenarTodo();
+        
+    }
+*/
+    ListadoLiquidacionProfesional(int matricula, float importe, int id, int nRow ) {
+       
+        initComponents();
+        setModal(true);
+        setLocationRelativeTo(null);
+        setResizable(true);
+        
+        idLiquidacion = id;
+        row = nRow;
+        
+        Profesional profesional = new Profesional();
+        profesional.setMatricula(matricula);
+        ControladorProfesional.getDatos(profesional); // Seria más eficiente pasar directamente el nombre
+        System.out.println(profesional.getNombre());
+        nombreProfesionalLabel.setText(profesional.getNombre());
+        importeLabel.setText(Float.toString(importe));
+        
+        cuentacuotas = new ArrayList<>();
+        cuentacuotasactual = new ArrayList<>();
+        ControladorCuentaCorriente.obtenerCuotasAdeudadasImporte(cuentacuotas, matricula, importe);
+        ControladorCuentaCorriente.obtenerCuotasLiquidacion(cuentacuotasactual, matricula, idLiquidacion);
+          
+    //    cuentacuota = cuentacuotas;
+    //    Collections.copy(cuentacuotaactual, cuentacuotas);
+        
+        modelo = (DefaultTableModel) this.jTable1.getModel();
+        // Vacio la tabla
+        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
+        
+            modelo.removeRow(i);
+       
+        }
+        
+        // Agrego una fila por cuota sleccionada
+        if (!cuentacuotasactual.isEmpty()){
+            for (CuentaCuotas cuentacuota : cuentacuotasactual){
+                Boolean esta = true;
+                String mes = new DateFormatSymbols().getMonths()[Integer.valueOf(cuentacuota.getMes())-1];
+                String nombreCuota = ControladorTipoCuota.getNombre(cuentacuota.getIdCuota());
+                Object[] data = { nombreCuota,mes,cuentacuota.getImporte(), esta };
+                modelo.addRow(data);
+            }
+        }
+        // Agrego una fila por cuota
+        for (CuentaCuotas cuentacuota : cuentacuotas){
+            Boolean esta = false;
+            String mes = new DateFormatSymbols().getMonths()[Integer.valueOf(cuentacuota.getMes())-1];
+            String nombreCuota = ControladorTipoCuota.getNombre(cuentacuota.getIdCuota());
+            Object[] data = { nombreCuota,mes,cuentacuota.getImporte(), esta };
+            modelo.addRow(data);
+        }
+        
+        
+    }
+
+
+    
+    /*
+    private void llenarTodo() {
+                
+        ids = ControladorProfesional.getObrasProfesional(matricula);
+        obras = new ArrayList<>();
+        ControladorObraSocial.getObrasSociales(obras);
+        
+        for(ObraSocial obra : obras){
+        
+            Boolean esta = false;
+            if(ids.contains(obra.getIdObraSocial()))
+                esta = true;
+            
+            Object[] data = { obra.getNombre(), esta };
+            modelo.addRow(data);
+        
+        }
+        
+    }*/
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabelTitulo = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        nombreProfesionalLabel = new javax.swing.JLabel();
+        importeLabel = new javax.swing.JLabel();
+
+        jCheckBox1.setText("jCheckBox1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Cuota", "Mes", "Importe", "Incluir"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Action action = new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                TableCellListener tcl = (TableCellListener)e.getSource();
+                Boolean newValue = (Boolean) tcl.getNewValue();
+                Float importe = 0f;
+                if(tcl.getColumn()==3){
+                    if (!idsNuevos.contains(tcl.getRow())){
+                        idsNuevos.add(tcl.getRow());
+                    }
+                    if (newValue.equals(true))
+                    //se resta al importe
+                    importe = Float.valueOf(importeLabel.getText())-tcl.getImporte();
+                    else
+                    //se suma
+                    importe = Float.valueOf(importeLabel.getText())+tcl.getImporte();
+
+                    importeLabel.setText(Float.toString(importe));
+                }
+            }
+
+        };
+
+        TableCellListener tcl = new TableCellListener(jTable1, action);
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabelTitulo.setText("Descuentos");
+
+        jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        nombreProfesionalLabel.setText("Nombre Profesional ");
+
+        importeLabel.setText("Importe a descontar");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(nombreProfesionalLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(importeLabel)
+                .addGap(34, 34, 34))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nombreProfesionalLabel)
+                    .addComponent(importeLabel))
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jLabelTitulo)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(113, 113, 113)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)))
+                .addContainerGap(170, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+     
+        //TODO: Verificar importe >0
+        
+        if (Float.valueOf(importeLabel.getText())>=0){
+            int indice1 = cuentacuotasactual.size();
+            Boolean esta;
+            Float valorNuevo;
+            
+            //Actualizar en la base
+            for (int indice:idsNuevos){
+                if (indice<indice1){ //pertenece a cuentacuotas actual
+                    esta = (Boolean) jTable1.getValueAt(indice, 3);
+                    if (esta.equals(false)){ //estaba como true y ahora pasó a false
+                        ControladorCuentaCorriente.quitarCuotasLiquidacion(cuentacuotasactual.get(indice).getIdCuentaCuotas());
+                        
+                        int column = 4 + columnas.indexOf(modelo.getValueAt(indice, 0));
+                        valorNuevo = (Float) tabla.getValueAt(row, column) - (Float) modelo.getValueAt(indice, 2);
+                        tabla.setValueAt(valorNuevo, row, column);
+                        
+                    }
+                }
+                else{ // pertenece a cuentacuotas
+                    esta = (Boolean) jTable1.getValueAt(indice, 3);
+                    if (esta.equals(true)){ //estaba como false y ahora pasó a true
+                        System.out.println(cuentacuotas.get(indice-indice1).getIdCuentaCuotas() + " " + idLiquidacion);
+                        ControladorCuentaCorriente.agregarCuotasLiquidacion(cuentacuotas.get(indice-indice1).getIdCuentaCuotas(),idLiquidacion);
+                    
+                        int column = 4 + columnas.indexOf(modelo.getValueAt(indice, 0));
+                        valorNuevo = Float.parseFloat(tabla.getValueAt(row, column).toString()) + Float.parseFloat(modelo.getValueAt(indice, 2).toString());
+                        tabla.setValueAt(valorNuevo, row, column);
+                    }
+                }
+        
+            }
+            //Actualizar valores en la tabla
+            // Neto
+            tabla.setValueAt(importeLabel.getText(), row, tabla.getColumnCount()-1);
+        }
+        else {
+             Mensaje.mostrarMensaje(rootPane, "El saldo no puede ser negativo", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+            
+//        ArrayList<Integer> idsNuevos = new ArrayList<>();
+//        
+//        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
+//        
+//            Boolean esta = (Boolean) modelo.getValueAt(i, 3);
+//            if(esta)
+//                idsNuevos.add(tipoCuotas.get(i).getIdCuota());
+//        
+//        }
+//        
+//        String resultado = ControladorProfesional.actualizarCuotas(idsNuevos, matricula);
+//        if (resultado.equals("")) //No hubo error
+//        {
+//            Mensaje.mostrarMensaje(rootPane, "Operación realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+//        } else {
+//            Mensaje.mostrarMensaje(rootPane, "Error al realizar la operación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//
+//        dispose();
+//        
+//        ArrayList<Integer> idsNuevos = new ArrayList<>();
+//        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
+//
+//            Boolean esta = (Boolean) modelo.getValueAt(i, 1);
+//            if(esta)
+//                idsNuevos.add(cuentacuotaactual.get(i).getIdCuentaCuotas());
+//
+//        }
+
+      /*  String resultado = ControladorProfesional.actualizarObras(idsNuevos, matricula);
+        if (resultado.equals("")) //No hubo error
+        {
+            Mensaje.mostrarMensaje(rootPane, "Operación realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            Mensaje.mostrarMensaje(rootPane, "Error al realizar la operación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+*/
+        dispose();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel importeLabel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel nombreProfesionalLabel;
+    // End of variables declaration//GEN-END:variables
+}

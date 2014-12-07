@@ -65,10 +65,62 @@ public class ControladorTipoCuota {
     
     }
     
+     public static String getNombre(int idCuota){
+        
+        try {
+            String consultaSQL = "SELECT nombre FROM tipocuota where idcuota = " + idCuota;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            if (resultado.next()){
+
+                    return resultado.getString("nombre");
+
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    
+    }
+     
     public static void getTipos(ArrayList<TipoCuota> tipos){
                 
         try {
-            String consultaSQL = "SELECT * FROM tipocuota where idcuota NOT IN (1, 2)";
+            String consultaSQL = "SELECT * FROM tipocuota where idcuota <> 1";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                TipoCuota tipo = new TipoCuota();
+                tipo.setIdCuota(resultado.getInt("idcuota"));
+                tipo.setNombre(resultado.getString("nombre"));
+                tipo.setImporte(resultado.getFloat("importe"));
+                tipo.setFrecuencia(resultado.getInt("frecuencia"));
+                tipos.add(tipo);
+
+            }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
+    public static void getTiposTodos(ArrayList<TipoCuota> tipos){
+                
+        try {
+            String consultaSQL = "SELECT * FROM tipocuota";
             
             Conexion conexion = new Conexion();
             conexion.Conectar();

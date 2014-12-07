@@ -25,7 +25,7 @@ public class ControladorProfesional {
         sqlbuild.append("INSERT INTO profesional (matricula, nombre, telefonos, direccion, localidad, cbu, banco, activo) VALUES (");
         sqlbuild.append(profesional.getMatricula());
         sqlbuild.append(", \"");
-        sqlbuild.append(profesional.getNombre());
+        sqlbuild.append(profesional.getNombre().replace("'", " "));
         sqlbuild.append("\", \"");
         sqlbuild.append(profesional.getTelefonos());
         sqlbuild.append("\", \"");
@@ -207,7 +207,7 @@ public class ControladorProfesional {
     
         StringBuilder sqlbuild = new StringBuilder();
         sqlbuild.append("update profesional set nombre=\"");
-        sqlbuild.append(profesional.getNombre());
+        sqlbuild.append(profesional.getNombre().replace("'", " "));
         sqlbuild.append("\", direccion=\"");
         sqlbuild.append(profesional.getDireccion());
         sqlbuild.append("\", telefonos=\"");

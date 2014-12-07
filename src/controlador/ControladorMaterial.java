@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utilidades.Conexion;
 import modelo.Material;
+import utilidades.Conexion;
+import utilidades.Fecha;
 
 /**
  *
@@ -170,8 +171,7 @@ public class ControladorMaterial {
     
     public static String registrarCompraMaterial(ArrayList<Material> materiales, int matricula, String nroFactura, String nroRecibo) {
         
-        Calendar calendar = Calendar.getInstance();
-        String fecha = String.valueOf(calendar.get(Calendar.YEAR) + "-" + ((int)calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+        String fecha = Fecha.getFechaActualInvertida();
         
         float importe = calcularImporte(materiales);
         String consultaSQL = "INSERT INTO factura (nfactura, matricula, detalle, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"\", \"" + fecha + "\", " + importe + ");";

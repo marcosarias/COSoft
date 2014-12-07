@@ -39,6 +39,7 @@ public class ControladorLiquidacion {
                     liquidacion.setFechaPago(resultado.getString("fechapago"));
                     liquidacion.setFechaRecibida(resultado.getString("fecharecibida"));
                     liquidacion.setImporte(resultado.getString("importe"));
+                    liquidacion.setNombre(resultado.getString("nombreliquidacion"));
                     liquidaciones.add(liquidacion);
      
                 }
@@ -50,7 +51,43 @@ public class ControladorLiquidacion {
         }
     
     }
+
+ public static Liquidacion getLiquidacion(int id){
+                
+        try {
+            String consultaSQL = "SELECT * FROM liquidacion where idliquidacion = " + id;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            Liquidacion liquidacion = new Liquidacion();
+            
+            while(resultado.next()){
+                    liquidacion.setIdLiquidacion(resultado.getInt("idliquidacion"));
+                    liquidacion.setIdObraSocial(resultado.getInt("idobrasocial"));
+                    liquidacion.setFechaPago(resultado.getString("fechapago"));
+                    liquidacion.setFechaRecibida(resultado.getString("fecharecibida"));
+                    liquidacion.setImporte(resultado.getString("importe"));
+                    liquidacion.setNombre(resultado.getString("nombreliquidacion"));
+                    //liquidacion.setDetalles(liquidacion.getDetalles());
+                }
+            
+            conexion.Cerrar_conexion();
+            
+            return liquidacion;
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+     return null;
+        
+        
     
+    }
+ 
+ 
  public static String insertarLiquidacion(Liquidacion liquidacion) {
     
         StringBuilder sqlbuild = new StringBuilder();
@@ -74,8 +111,7 @@ public class ControladorLiquidacion {
         conexion.Cerrar_conexion();
         
         if(resultado.equals("")){ //se insertó bien la liquidación, puedo empezar con el detalle
-            ArrayList<DetalleLiquidacion> detalles;
-            detalles = liquidacion.getDetalles();
+            ArrayList<DetalleLiquidacion> detalles = liquidacion.getDetalles();
             if (!detalles.isEmpty()) // inserto la lista de detalles
             {
                 int idLiquidacion = ControladorLiquidacion.getIdLiquidacion(liquidacion);
@@ -117,6 +153,7 @@ public class ControladorLiquidacion {
     /**
      *
      * @param liquidacion
+     * Busca el id liquidacion de la liquidacion recien creada
      * @return
      */
     public static int getIdLiquidacion(Liquidacion liquidacion){
@@ -125,6 +162,7 @@ public class ControladorLiquidacion {
         
         try{
             StringBuilder sqlbuild = new StringBuilder(); 
+            
             sqlbuild.append("SELECT idliquidacion FROM liquidacion order by idliquidacion desc limit 1");
 
             String consultaSQL = sqlbuild.toString();
@@ -147,6 +185,36 @@ public class ControladorLiquidacion {
     
     }
     
+    public static ArrayList<DetalleLiquidacion> getDetallesLiquidacion(int id) {
+
+        ArrayList<DetalleLiquidacion> detalles = new ArrayList<>();
+        
+        try {
+            String consultaSQL = "SELECT * FROM detalleliquidacion WHERE idliquidacion = " + id;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    DetalleLiquidacion detalle = new DetalleLiquidacion();
+                    detalle.setAtributo(resultado.getFloat("atributo"));
+                    detalle.setIdDetalleLiquidacion(resultado.getInt("iddetalleliquidacion"));
+                    detalle.setIdLiquidacion(id);
+                    detalle.setMatricula(resultado.getInt("matricula"));
+                    detalle.setValor(resultado.getString("valor"));
+                   //TODO: getconceptos
+                    detalles.add(detalle);
+     
+                }
+             }catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return detalles;
+    }
+     
     public static String getNombreLiquidacion(int id){
         String nombre = "";
         
@@ -173,7 +241,23 @@ public class ControladorLiquidacion {
     }
     
     public static String eliminar(int idLiquidacion) {
-        String consultaSQL = "delete from liquidacion where idliquidacion= " + idLiquidacion;
+        
+        String resultado = eliminarDetalles(idLiquidacion);
+        ControladorCuentaCorriente.eliminarLiquidacionCuentaCuotas(idLiquidacion);
+        if (resultado.equals("")){
+            String consultaSQL = "delete from liquidacion where idliquidacion= " + idLiquidacion;
+
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            resultado = conexion.ejecutarSentenciaSQL(consultaSQL);
+            conexion.Cerrar_conexion();
+        }
+        return resultado;
+    }
+    
+    public static String eliminarDetalles(int idLiquidacion) {
+        
+        String consultaSQL = "delete from detalleliquidacion where idliquidacion = " + idLiquidacion;
         
         Conexion conexion = new Conexion();
         conexion.Conectar();
@@ -183,7 +267,7 @@ public class ControladorLiquidacion {
         return resultado;
     }
 
-    private static String insertarDetalleLiquidacion(DetalleLiquidacion detalle, int idLiquidacion) {
+    public static String insertarDetalleLiquidacion(DetalleLiquidacion detalle, int idLiquidacion) {
         StringBuilder sqlbuild = new StringBuilder();
         sqlbuild.append("INSERT INTO detalleliquidacion (idliquidacion,matricula, atributo) VALUES (");
         sqlbuild.append(idLiquidacion);
@@ -252,6 +336,26 @@ public class ControladorLiquidacion {
         
         return resultado;
     }
-    
+      
+    public static ArrayList<String> getCuotas(int id) {
+
+        ArrayList<String> cuotas= new ArrayList<>();
+        
+        try {
+            String consultaSQL = "select nombre from tipocuota where idcuota in (select idcuota from cuentacuotas where idliquidacion = " + id + " group by idcuota)";
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                    cuotas.add(resultado.getString("nombre"));
+                }
+             }catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return cuotas;
+    }
 }
 

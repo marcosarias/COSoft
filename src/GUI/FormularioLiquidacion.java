@@ -6,6 +6,7 @@
 
 package GUI;
 
+import static GUI.TablaLiquidacion.tabla;
 import controlador.ControladorCuentaCorriente;
 import controlador.ControladorLiquidacion;
 import controlador.ControladorObraSocial;
@@ -126,7 +127,7 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null}
             },
             new String [] {
                 "Profesional", "Importe"
@@ -313,10 +314,12 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
             Float suma = 0f;
             
             for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
-                Float importeprof = (Float) modelo.getValueAt(i, 1);
+                
+                Float importeprof = (Float) modelo.getValueAt(i, 1) ;
                 suma += importeprof;
         
             }
+            
             if (java.lang.Float.compare(importe, suma)==0){
                 // Almacenar la liquidación y calcular
                 Liquidacion liquidacion = new Liquidacion();
@@ -330,56 +333,104 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
                 
                 ArrayList<DetalleLiquidacion> detalles = new ArrayList<>();
                 DetalleLiquidacion detalle = new DetalleLiquidacion();
-                
-                for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
-               
-                    Float importeprof = (Float) modelo.getValueAt(i, 1);
-                    detalle.setAtributo(importeprof);
-                    String nombre = String.valueOf(jTable1.getComponentAt(i, 0));
-                    Profesional profesional = new Profesional();
-                    profesional.setNombre(nombre);
-                    
-                    ControladorProfesional.getDatosNombre(profesional);
-                    detalle.setMatricula(profesional.getMatricula());
-                    //detalle.setIdLiquidacion(idLiquidacion);
-                    // al importe restar la comisión del 10%
-                    importeprof-=importeprof*0.10f;
-                    //calcular conceptos que se restan e insertar con el iddetalle
-                     Boolean calculado = false;
-                     
-                     //obtener las cuotas que se le pueden restar a la liquidacion
-                     ArrayList<CuentaCuotas> cuentacuotas = null;
-                     ArrayList<ConceptoLiquidacion> conceptos = null;
-                     //cuentacuotas.setMatricula(profesional.getMatricula());
-                     ControladorCuentaCorriente.obtenerCuotasAdeudadasImporte(cuentacuotas, profesional.getMatricula(),importeprof);
-                     
-                     // ARREGLAR!!
-                     if (cuentacuotas!=null){
-                     while (importeprof!=0 && calculado!=true ){
-                         for (CuentaCuotas cuentacuota : cuentacuotas){
-                             if(cuentacuota.getImporte() < importeprof){
-                                 ConceptoLiquidacion concepto = new ConceptoLiquidacion();
-                                 concepto.setIdTipoCuota(concepto.getIdTipoCuota());
-                                 concepto.setImporte(cuentacuota.getImporte());
-                                 importeprof-=cuentacuota.getImporte();
-                                 
-                                 conceptos.add(concepto);
-                             }
-                         }
-                         calculado = true;
-                     }
-                     }
-                    detalle.setConceptos(conceptos);
-                    detalles.add(detalle);
-                }
-                
                 liquidacion.setDetalles(detalles);
-                
+
                 String resultado = ControladorLiquidacion.insertarLiquidacion(liquidacion);
+                idLiquidacion = ControladorLiquidacion.getIdLiquidacion(liquidacion);
+                
+                liquidacion.setIdLiquidacion(idLiquidacion);
+                
+                // Obtener lista de profesionales y sus importes
+                
+                
+                 for(int i = jTable1.getRowCount()-1; i >= 0; i--){
+              
+                    Float importeprof = (Float) modelo.getValueAt(i, 1);
+                    
+                    if (java.lang.Float.compare(importeprof, 0f)!=0){
+
+                        detalle.setAtributo(importeprof);
+                        String nombre = String.valueOf(jTable1.getValueAt(i, 0));
+                        Profesional profesional = new Profesional();
+                        profesional.setNombre(nombre);
+
+                        ControladorProfesional.getDatosNombre(profesional);
+                        detalle.setMatricula(profesional.getMatricula());
+                        detalle.setIdLiquidacion(idLiquidacion);
+
+                       // detalles.add(detalle);
+                        ControladorLiquidacion.insertarDetalleLiquidacion(detalle, idLiquidacion);
+                    }
+                 }
+                
+//                 // Por cada profesional calcular cuotas a descontar 
+//                // ---> Se hace en Tabla Liquidaciòn con la ventana de Listado liquidaciòn Profesional
+//                ArrayList<DetalleLiquidacion> detalles = new ArrayList<>();
+//                DetalleLiquidacion detalle = new DetalleLiquidacion();
+//                
+//              
+//               
+//                for(int i = jTable1.getRowCount()-1; i >= 0; i--){
+//              
+//                    Float importeprof = (Float) modelo.getValueAt(i, 1);
+//                    detalle.setAtributo(importeprof);
+//                    String nombre = String.valueOf(jTable1.getValueAt(i, 0));
+//                    Profesional profesional = new Profesional();
+//                    profesional.setNombre(nombre);
+//                    
+//                    ControladorProfesional.getDatosNombre(profesional);
+//                    detalle.setMatricula(profesional.getMatricula());
+//                    detalle.setIdLiquidacion(idLiquidacion);
+//                    
+//                    // al importe restar la comisión del 10%
+//                    importeprof-=importeprof*0.10f;
+//                    
+//                    //calcular conceptos que se restan e insertar con el iddetalle
+//                     Boolean calculado = false;
+//                     
+//                     //obtener las cuotas que se le pueden restar a la liquidacion
+//                     ArrayList<CuentaCuotas> cuentacuotas = new ArrayList<>();
+//                     ArrayList<ConceptoLiquidacion> conceptos = new ArrayList<>();
+//                     //cuentacuotas.setMatricula(profesional.getMatricula());
+//                     ControladorCuentaCorriente.obtenerCuotasAdeudadasImporte(cuentacuotas, profesional.getMatricula(),importeprof);
+//                     
+//                     // ARREGLAR!!
+//                     if (cuentacuotas!=null){
+//                         
+//                         ListadoLiquidacionProfesional form = new ListadoLiquidacionProfesional(profesional,importeprof, cuentacuotas);
+//                         this.setVisible(false);
+//                         form.setVisible(true);
+//                         /*
+//                     while (importeprof!=0 && calculado!=true ){
+//                         for (CuentaCuotas cuentacuota : cuentacuotas){
+//                             if(cuentacuota.getImporte() < importeprof){
+//                                 ConceptoLiquidacion concepto = new ConceptoLiquidacion();
+//                                 concepto.setIdTipoCuota(concepto.getIdTipoCuota());
+//                                 concepto.setImporte(cuentacuota.getImporte());
+//                                 importeprof-=cuentacuota.getImporte();
+//                                 
+//                                 conceptos.add(concepto);
+//                             }
+//                         }
+//                         calculado = true;
+//                     }*/
+//                     }
+//                    detalle.setConceptos(conceptos);
+//                    detalles.add(detalle);
+//                }
+//                
+                //liquidacion.setDetalles(detalles);
+                
+//                String resultado = ControladorLiquidacion.insertarLiquidacion(liquidacion);
                 
                 if(resultado.equals("")){  //No hubo error
                     //TODO: Mostrar liquidación calculada
+                   // liquidacion = ControladorLiquidacion.getLiquidacion(idLiquidacion);
+                    TablaLiquidacion form = new TablaLiquidacion(idLiquidacion);
+                   // form.setBounds(0, 0, 1600, 700);
+                    form.setVisible(true); 
                     //Mensaje.mostrarMensaje(rootPane, "Liquidacion calculada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                    
                 }
                 else Mensaje.mostrarMensaje(rootPane, "Error al agregar intentar crear la liquidación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
             
@@ -473,7 +524,7 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
 
             for(Profesional profesional : profesionales){
 
-                Object[] data = { profesional.getNombre(), 0 };
+                Object[] data = { profesional.getNombre(), 0f };
                 modelo.addRow(data);
 
 

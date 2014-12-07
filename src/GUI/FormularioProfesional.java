@@ -134,7 +134,7 @@ public class FormularioProfesional extends javax.swing.JDialog {
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelTitulo.setText("Nuevo Profesional");
 
-        jLabel15.setText("Nombre y Apellido:");
+        jLabel15.setText("Apellido y Nombre:");
 
         jLabel16.setText("Telefonos:");
 
@@ -159,6 +159,8 @@ public class FormularioProfesional extends javax.swing.JDialog {
         jTextField1.setEditable(false);
 
         jLabel25.setText("Activo:");
+
+        jCheckBox1.setSelected(true);
 
         javax.swing.GroupLayout nuevoOdontologoPanelLayout = new javax.swing.GroupLayout(nuevoOdontologoPanel);
         nuevoOdontologoPanel.setLayout(nuevoOdontologoPanelLayout);

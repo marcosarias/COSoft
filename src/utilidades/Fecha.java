@@ -76,4 +76,12 @@ public class Fecha {
     
     }
     
+    public static String getMes(String mes){
+    
+        String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+        
+        return meses[Integer.parseInt(mes) - 1];
+    
+    }
+    
 }

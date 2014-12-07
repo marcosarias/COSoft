@@ -72,7 +72,35 @@ public class ControladorCuentaCorriente {
     public static void obtenerCuotasSinRecibo(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula){
     
         try {
-            String consultaSQL = "SELECT * FROM vistacuentacorriente where idrecibo is null and matricula = " + matricula;
+            String consultaSQL = "SELECT * FROM vistacuentacorriente where idrecibo is null and id not in (select cuota from condonaciones) and matricula = " + matricula;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                    
+                    ConceptoCuentaCorriente concepto = new ConceptoCuentaCorriente();
+                    concepto.setId(resultado.getInt("id"));
+                    concepto.setImporte(resultado.getFloat("importe"));
+                    concepto.setDetalle(resultado.getString("nombre"));
+                    concepto.setFecha(resultado.getString("fecha"));
+                    conceptos.add(concepto);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public static void obtenerCuotasSinFactura(ArrayList<ConceptoCuentaCorriente> conceptos, int matricula){
+    
+        try {
+            String consultaSQL = "SELECT * FROM vistacuentacorriente where idfactura is null and id not in (select cuota from condonaciones) and matricula = " + matricula;
             
             Conexion conexion = new Conexion();
             conexion.Conectar();
@@ -130,7 +158,38 @@ public class ControladorCuentaCorriente {
      public static void obtenerCuotasAdeudadasImporte(ArrayList<CuentaCuotas> cuentacuotas, int matricula, float importe){
     
         try {
-            String consultaSQL = "SELECT * FROM cuentacuotas where idliquidacion = null and matricula = " + matricula + " and importe <= " + String.valueOf(importe);
+            String consultaSQL = "SELECT * FROM cuentacuotas where idliquidacion is null and id not in (select cuota from condonaciones) and matricula = " + matricula + " and importe <= " + String.valueOf(importe);
+            // + Order by mes ? 
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                    CuentaCuotas cuentacuota = new CuentaCuotas();
+                    
+                    cuentacuota.setIdCuentaCuotas(resultado.getInt("idcuentacuotas"));
+                    cuentacuota.setMatricula(matricula);
+                    cuentacuota.setIdCuota(resultado.getInt("idcuota"));
+                    cuentacuota.setMes(resultado.getString("mes"));
+                    cuentacuota.setAnio(resultado.getString("anio"));
+                    cuentacuota.setImporte(resultado.getFloat("importe"));
+                    
+                    cuentacuotas.add(cuentacuota);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
+    public static void obtenerCuotasLiquidacion(ArrayList<CuentaCuotas> cuentacuotas, int matricula, int idLiquidacion){
+    
+        try {
+            String consultaSQL = "SELECT * FROM cuentacuotas where idliquidacion = " + idLiquidacion + " and matricula = " + matricula;
             // + Order by mes ? 
             
             Conexion conexion = new Conexion();
@@ -161,7 +220,7 @@ public class ControladorCuentaCorriente {
     public static void obtenerDebitos(ArrayList<Debito> debitos, String fecha){
     
         try {
-            String consultaSQL = "select idcuentacuotas, cuentacuotas.matricula, nombre, telefonos, direccion, sum(importe) as montototal from cuentacuotas inner join profesional on cuentacuotas.matricula = profesional.matricula where fechadebito < '" + fecha + "' and idrecibo is null group by cuentacuotas.matricula";
+            String consultaSQL = "select idcuentacuotas, cuentacuotas.matricula, nombre, telefonos, direccion, sum(importe) as montototal from cuentacuotas inner join profesional on cuentacuotas.matricula = profesional.matricula where fechadebito < '" + fecha + "' and idrecibo is null and idcuentacuotas not in (select cuota from condonaciones) group by cuentacuotas.matricula";
             
             Conexion conexion = new Conexion();
             conexion.Conectar();
@@ -284,5 +343,30 @@ public class ControladorCuentaCorriente {
         Collections.sort(conceptos);
         
     }
+
+    public static void quitarCuotasLiquidacion(int id) {
+        String consultaSQL = "UPDATE cuentacuotas SET  idliquidacion = NULL WHERE idcuentacuotas = " + id;
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        conexion.ejecutarSentenciaSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+    }
+
+    public static void agregarCuotasLiquidacion(int idCuentaCuotas, int idLiquidacion) {
+       String consultaSQL = "UPDATE cuentacuotas SET  idliquidacion = " + idLiquidacion + " WHERE idcuentacuotas = " + idCuentaCuotas;
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        conexion.ejecutarSentenciaSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+    }
     
+	    public static void eliminarLiquidacionCuentaCuotas(int idLiquidacion) {
+                
+        String consultaSQL = "UPDATE cuentacuotas SET  idliquidacion = NULL WHERE idliquidacion = " + idLiquidacion;
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        conexion.ejecutarSentenciaSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+    }
+	
 }

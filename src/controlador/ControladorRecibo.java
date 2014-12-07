@@ -17,6 +17,7 @@ import utilidades.Conexion;
 import modelo.Factura;
 import modelo.Material;
 import modelo.Recibo;
+import utilidades.Fecha;
 
 /**
  *
@@ -78,7 +79,7 @@ public class ControladorRecibo {
     public static void obtenerDetallesRecibo(ArrayList<ConceptoCuentaCorriente> conceptos, String nroRecibo){
     
         try {
-            String consultaSQL = "SELECT nombre, importe, idfactura FROM vistacuentacorriente where idrecibo = '" + nroRecibo + "'";
+            String consultaSQL = "SELECT nombre, importe, idfactura, mes FROM vistacuentacorriente where idrecibo = '" + nroRecibo + "'";
             
             Conexion conexion = new Conexion();
             conexion.Conectar();
@@ -88,7 +89,7 @@ public class ControladorRecibo {
                 
                     ConceptoCuentaCorriente concepto = new ConceptoCuentaCorriente();
                     concepto.setIdfactura(resultado.getString("idfactura"));
-                    concepto.setDetalle(resultado.getString("nombre"));
+                    concepto.setDetalle(resultado.getString("nombre") + " - " + Fecha.getMes(resultado.getString("mes")));
                     concepto.setImporte(resultado.getFloat("importe"));
                     conceptos.add(concepto);
                     

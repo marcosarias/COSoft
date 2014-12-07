@@ -6,6 +6,7 @@
 
 package GUI;
 
+import static GUI.TablaLiquidacion.tabla;
 import controlador.ControladorCuentaCorriente;
 import controlador.ControladorMaterial;
 import java.awt.Point;
@@ -13,18 +14,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.SpinnerDateModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.ConceptoCuentaCorriente;
 import modelo.Condonacion;
 import modelo.Material;
 import modelo.RenglonCuentaCorriente;
+import utilidades.Excel;
 import utilidades.Fecha;
 import utilidades.Mensaje;
 
@@ -37,6 +43,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
     int id;
     String filtro;
       
+    File file;
+    
     Boolean deboRefrescar;
     
     ArrayList<RenglonCuentaCorriente> renglones;
@@ -158,6 +166,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jMenuItemCondonar = new javax.swing.JMenuItem();
+        jFileChooser1 = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -173,7 +182,9 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         jSpinner3 = new javax.swing.JSpinner(sm);
         SpinnerDateModel sm2 = new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH);
         jSpinner4 = new javax.swing.JSpinner(sm2);
+        jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         jMenuItemCondonar.setText("Condonar débito");
         jMenuItemCondonar.addActionListener(new java.awt.event.ActionListener() {
@@ -250,6 +261,13 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         JSpinner.DateEditor de2 = new JSpinner.DateEditor(jSpinner4, "dd-MM-yyyy");
         jSpinner4.setEditor(de2);
 
+        jButton2.setText("Exportar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -267,6 +285,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -279,7 +299,8 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                     .addComponent(jButton3)
                     .addComponent(jButton1)
                     .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -287,6 +308,13 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Facturar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
             }
         });
 
@@ -305,11 +333,12 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton4)
-                        .addGap(0, 694, Short.MAX_VALUE)))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton5)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(290, 290, 290)
@@ -330,7 +359,9 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
                 .addContainerGap())
         );
 
@@ -354,7 +385,7 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        filtro = " where fecha <= '" + Fecha.getFechaFromJSpinner((Date)jSpinner4.getModel().getValue()) + "'";
+        filtro = " and fecha <= '" + Fecha.getFechaFromJSpinner((Date)jSpinner4.getModel().getValue()) + "'";
         llenarTodo();
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -367,10 +398,47 @@ public class FormularioCuentaCorriente extends javax.swing.JDialog implements Wi
         
     }//GEN-LAST:event_jMenuItemCondonarActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        deboRefrescar = true;
+        GenerarFactura form = new GenerarFactura(id);
+        form.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Hoja de cálculo Excel (*.xlsx)", "xlsx");
+        jFileChooser1.setFileFilter(filter);
+        int estadoJC = jFileChooser1.showSaveDialog(null);
+        if (estadoJC == JFileChooser.APPROVE_OPTION){
+        
+            file = new File(jFileChooser1.getSelectedFile() + ".xlsx");
+
+            Thread t = new Thread(runnable, "");
+            t.start();
+        
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                jButton2.setText("Exportando");
+                jButton2.setEnabled(false);
+                Excel.writeFile(jTable1, file, "Cuenta corriente " + jLabel1.getText(), "Cuenta Corriente");
+                jButton2.setText("Exportar");
+                jButton2.setEnabled(true);
+                JOptionPane.showMessageDialog(rootPane, file.getName() + " guardado con éxito.", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+            }
+    };
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

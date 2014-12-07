@@ -289,7 +289,7 @@ public class ListadoMateriales extends javax.swing.JDialog implements WindowFocu
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         deboRefrescar = true;
-        FormularioCompraMaterial form = new FormularioCompraMaterial();
+        FormularioVentaMaterial form = new FormularioVentaMaterial();
         form.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 

@@ -9,13 +9,19 @@ package GUI;
 import controlador.ControladorFactura;
 import controlador.ControladorMaterial;
 import controlador.ControladorProfesional;
+import controlador.TableCellListener;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import modelo.ConceptoCuentaCorriente;
 import modelo.Material;
 import modelo.Profesional;
+import utilidades.Fecha;
 import utilidades.Formato;
 import utilidades.Mensaje;
 
@@ -23,7 +29,7 @@ import utilidades.Mensaje;
  *
  * @author COCO
  */
-public class FormularioCompraMaterial extends javax.swing.JDialog {
+public class FormularioVentaMaterial extends javax.swing.JDialog {
 
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
@@ -36,7 +42,7 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
     /**
      * Creates new form FormularioCompraMaterial
      */
-    public FormularioCompraMaterial() {
+    public FormularioVentaMaterial() {
         initComponents();
         setModal(true);
         setLocationRelativeTo(null);
@@ -49,7 +55,7 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
         
         llenarTodo();
         
-        //jTextField1.setText(String.valueOf(ControladorFactura.obtenerNroFactura()));
+        jTextField3.setText("0.0");
         
     }
 
@@ -84,6 +90,8 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
@@ -120,6 +128,33 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jTable1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTable1FocusLost(evt);
+            }
+        });
+        Action action = new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                TableCellListener tcl = (TableCellListener)e.getSource();
+                float saldo = 0;
+                int i = 0;
+                for(Material material : materiales){
+                    saldo += material.getPrecio() * (int)modelo.getValueAt(i, 1);
+                    i++;
+                }
+
+                jTextField3.setText(String.valueOf(saldo));
+            }
+        };
+
+        TableCellListener tcl = new TableCellListener(jTable1, action);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel2.setText("Nro Factura: ");
@@ -138,6 +173,8 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
             }
         });
 
+        jLabel4.setText("Monto total");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -145,20 +182,29 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,8 +221,12 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addContainerGap())
         );
 
@@ -266,16 +316,19 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
                 }
         
             }
+            if(!jTextField3.getText().equals("0.0")){
+                String resultado = ControladorMaterial.registrarCompraMaterial(nuevos, profesionales.get(jComboBox1.getSelectedIndex()).getMatricula(), jTextField1.getText(), jTextField2.getText());
+                if (resultado.equals("")) //No hubo error
+                {
+                    Mensaje.mostrarMensaje(rootPane, "Compra realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                } else {
+                    Mensaje.mostrarMensaje(rootPane, "Error al realizar la compra:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                }
+            else Mensaje.mostrarMensaje(rootPane, "Error monto incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
             
-            String resultado = ControladorMaterial.registrarCompraMaterial(nuevos, profesionales.get(jComboBox1.getSelectedIndex()).getMatricula(), jTextField1.getText(), jTextField2.getText());
-            if (resultado.equals("")) //No hubo error
-            {
-                Mensaje.mostrarMensaje(rootPane, "Compra realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                Mensaje.mostrarMensaje(rootPane, "Error al realizar la compra:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
-            }
             
-            dispose();
             
         }
         
@@ -303,6 +356,14 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
                 Mensaje.mostrarMensaje(rootPane, "Formato incorrecto de nro de recibo", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jTextField2FocusLost
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jTable1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTable1FocusLost
+        
+    }//GEN-LAST:event_jTable1FocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -310,6 +371,7 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -317,6 +379,7 @@ public class FormularioCompraMaterial extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
     private void llenarTodo() {

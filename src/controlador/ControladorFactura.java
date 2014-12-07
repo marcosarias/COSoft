@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.ConceptoCuentaCorriente;
 import utilidades.Conexion;
 import modelo.Factura;
 import modelo.Material;
 import modelo.TipoCuota;
+import utilidades.Fecha;
 
 /**
  *
@@ -110,7 +112,7 @@ public class ControladorFactura {
     public static void obtenerCuotasFactura(ArrayList<TipoCuota> cuotas, String nroFactura){
     
         try {
-            String consultaSQL = "SELECT nombre, cuentacuotas.importe FROM cuentacuotas inner join tipocuota on cuentacuotas.idcuota = tipocuota.idcuota where cuentacuotas.idcuota <> 1 AND idfactura = '" + nroFactura + "'";
+            String consultaSQL = "SELECT nombre, cuentacuotas.importe, cuentacuotas.mes FROM cuentacuotas inner join tipocuota on cuentacuotas.idcuota = tipocuota.idcuota where cuentacuotas.idcuota <> 1 AND idfactura = '" + nroFactura + "'";
             
             Conexion conexion = new Conexion();
             conexion.Conectar();
@@ -120,7 +122,7 @@ public class ControladorFactura {
                 
                     TipoCuota cuota = new TipoCuota();
                     cuota.setImporte(resultado.getInt("importe"));
-                    cuota.setNombre(resultado.getString("nombre"));
+                    cuota.setNombre(resultado.getString("nombre") + " - " + Fecha.getMes(resultado.getString("mes")));
                     cuotas.add(cuota);
                     
                 }
@@ -170,6 +172,26 @@ public class ControladorFactura {
         
         return resultado;
     
+    }
+
+    public static String generarFactura(ArrayList<ConceptoCuentaCorriente> conceptos, float importe, int matricula, String nroFactura, String fecha) {
+        
+        String consultaSQL = "";
+        consultaSQL += "INSERT INTO factura (nfactura, matricula, fecha, importe) VALUES (\"" + nroFactura + "\", " + matricula + ", \"" + fecha + "\", " + importe + ");";
+        
+        for(ConceptoCuentaCorriente concepto : conceptos){
+        
+            consultaSQL += "UPDATE cuentacuotas SET idfactura = '" + nroFactura + "' where idcuentacuotas = " + concepto.getId() + ";";
+        
+        }
+        
+        Conexion conexion = new Conexion();
+        conexion.Conectar();
+        String resultado = conexion.ejecutarTransaccionSQL(consultaSQL);
+        conexion.Cerrar_conexion();
+        
+        return resultado;
+        
     }
     
 }

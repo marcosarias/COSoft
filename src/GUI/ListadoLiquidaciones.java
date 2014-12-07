@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import static GUI.TablaLiquidacion.tabla;
 import controlador.ControladorLiquidacion;
 import controlador.ControladorObraSocial;
 import java.awt.Point;
@@ -40,7 +41,7 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
     private ArrayList<ObraSocial> obras;
     
     /**
-     * Creates new form ListadoProfesionales
+     * Creates new form ListadoLiquidaciones
      */
     public ListadoLiquidaciones() {
         initComponents();
@@ -48,13 +49,26 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
         setLocationRelativeTo(null);
         setResizable(false);
         
-        modelo = (DefaultTableModel) jTable1.getModel();
-        modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
+        modelo = (DefaultTableModel) liquidacionesTable.getModel();
+        modeloColumnas = (DefaultTableColumnModel) liquidacionesTable.getColumnModel();
         
         liquidaciones = new ArrayList<>();
         deboRefrescar = false;
         
-        jTable1.addMouseListener(new MouseAdapter() {
+        liquidacionesTable.addMouseListener(new MouseAdapter() {
+            
+             @Override
+            public void mousePressed(MouseEvent me) {
+                JTable table =(JTable) me.getSource();
+                Point p = me.getPoint();
+                int row = table.rowAtPoint(p);
+                if (me.getClickCount() == 2) {
+                    Liquidacion liquidacion = new Liquidacion();
+                    liquidacion = liquidaciones.get(liquidacionesTable.getSelectedRow());
+                    TablaLiquidacion form = new TablaLiquidacion(liquidacion.getIdLiquidacion());
+                    form.setVisible(true);
+                }
+            }
             
             @Override
             public void mouseReleased(MouseEvent me) {
@@ -107,14 +121,12 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
-        jMenuItemVerCuotas = new javax.swing.JMenuItem();
-        jMenuItemVerLibrosEquip = new javax.swing.JMenuItem();
+        jMenuItemVerLiquidacion = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItemEditar = new javax.swing.JMenuItem();
         jMenuItemEliminar = new javax.swing.JMenuItem();
         jLabelTitulo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        liquidacionesTable = new javax.swing.JTable();
         jSeparator3 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -124,30 +136,14 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
         jLabel2 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox();
 
-        jMenuItemVerCuotas.setText("Ver suscripciones");
-        jMenuItemVerCuotas.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemVerLiquidacion.setText("Ver Liquidación");
+        jMenuItemVerLiquidacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemVerCuotasActionPerformed(evt);
+                jMenuItemVerLiquidacionActionPerformed(evt);
             }
         });
-        jPopupMenu1.add(jMenuItemVerCuotas);
-
-        jMenuItemVerLibrosEquip.setText("Ver cuotas pendientes");
-        jMenuItemVerLibrosEquip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemVerLibrosEquipActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(jMenuItemVerLibrosEquip);
+        jPopupMenu1.add(jMenuItemVerLiquidacion);
         jPopupMenu1.add(jSeparator1);
-
-        jMenuItemEditar.setText("Editar");
-        jMenuItemEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemEditarActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(jMenuItemEditar);
 
         jMenuItemEliminar.setText("Eliminar");
         jMenuItemEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -162,19 +158,19 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelTitulo.setText("Listado de Liquidaciones");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        liquidacionesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Fecha Recibida", "Fecha Pago", "Obra Social", "Total"
+                "Fecha Recibida", "Fecha Pago", "Obra Social", "Nombre", "Total"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -185,7 +181,7 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(liquidacionesTable);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -299,11 +295,11 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEliminarActionPerformed
-        // TODO add your handling code here:
+     
         int ok = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar esta liquidación?", "Atención", JOptionPane.YES_NO_OPTION);
         
         if(ok == JOptionPane.YES_OPTION){
-            int i = jTable1.getSelectedRow();
+            int i = liquidacionesTable.getSelectedRow();
             String resultado = ControladorLiquidacion.eliminar(liquidaciones.get(i).getIdLiquidacion());
             if(resultado.equals("")){
                 modelo.removeRow(i);
@@ -313,23 +309,16 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
         }
     }//GEN-LAST:event_jMenuItemEliminarActionPerformed
 
-    private void jMenuItemEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEditarActionPerformed
+    private void jMenuItemVerLiquidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerLiquidacionActionPerformed
         // TODO add your handling code here:
-        deboRefrescar = true;
-        FormularioProfesional form = new FormularioProfesional(1);
-        form.setData(liquidaciones.get(jTable1.getSelectedRow()).getIdLiquidacion());
+        Liquidacion liquidacion = new Liquidacion();
+
+        
+        liquidacion = liquidaciones.get(liquidacionesTable.getSelectedRow());
+        TablaLiquidacion form = new TablaLiquidacion(liquidacion.getIdLiquidacion());
         form.setVisible(true);
-    }//GEN-LAST:event_jMenuItemEditarActionPerformed
 
-    private void jMenuItemVerCuotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerCuotasActionPerformed
-        // TODO add your handling code here:
-        //ListadoCuotasProfesional form = new ListadoCuotasProfesional(liquidaciones.get(jTable1.getSelectedRow()).getIdLiquidacion());
-       // form.setVisible(true);
-    }//GEN-LAST:event_jMenuItemVerCuotasActionPerformed
-
-    private void jMenuItemVerLibrosEquipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerLibrosEquipActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItemVerLibrosEquipActionPerformed
+    }//GEN-LAST:event_jMenuItemVerLiquidacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -338,17 +327,15 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JMenuItem jMenuItemEditar;
     private javax.swing.JMenuItem jMenuItemEliminar;
-    private javax.swing.JMenuItem jMenuItemVerCuotas;
-    private javax.swing.JMenuItem jMenuItemVerLibrosEquip;
+    private javax.swing.JMenuItem jMenuItemVerLiquidacion;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable liquidacionesTable;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -367,7 +354,7 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
 
     private void llenarTodo() {
 
-        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
+        for(int i = liquidacionesTable.getRowCount() - 1; i >= 0; i--){
         
             modelo.removeRow(i);
         
@@ -384,7 +371,7 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
             ControladorObraSocial.getDatos(obra);
         
             String nombreobrasocial = obra.getNombre();
-            String[] data = { liquidacion.getFechaRecibida(), liquidacion.getFechaPago(), nombreobrasocial, liquidacion.getImporte() };
+            String[] data = { liquidacion.getFechaRecibida(), liquidacion.getFechaPago(), nombreobrasocial, liquidacion.getNombre(), liquidacion.getImporte() };
             modelo.addRow(data);
         
         }
