@@ -24,7 +24,7 @@ public class Conexion {
             Class.forName("com.mysql.jdbc.Driver");
             Config cfg = null;
             try {
-                cfg = Xml.cargar("config.xml");
+                cfg = Xml.cargar("data/config.xml");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             }

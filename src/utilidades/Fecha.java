@@ -84,4 +84,12 @@ public class Fecha {
     
     }
     
+    public static String getFechaHoraActual(){
+    
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        return sdf.format(calendar.getTime());
+    
+    }
+    
 }

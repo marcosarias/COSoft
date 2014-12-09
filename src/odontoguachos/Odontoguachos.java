@@ -7,7 +7,6 @@ package odontoguachos;
 import GUI.FormularioPrincipal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -28,7 +27,7 @@ public class Odontoguachos {
         //mf.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         mf.setLocationRelativeTo(null);
         mf.setResizable(true);
-        mf.setTitle("COSoft");
+        mf.setTitle("Centro Odontológico del Prtido de la Costa");
         
     }
     

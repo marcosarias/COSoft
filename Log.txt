@@ -1,0 +1,4 @@
+Error al eliminar profesional:
+Cannot delete or update a parent row: a foreign key constraint fails (`cosoft`.`cuentacuotas`, CONSTRAINT `matriculacuenta` FOREIGN KEY (`matricula`) REFERENCES `profesional` (`matricula`) ON UPDATE NO ACTION) - 09-12-2014 06:55:13
+Error al eliminar profesional:
+Cannot delete or update a parent row: a foreign key constraint fails (`cosoft`.`cuentacuotas`, CONSTRAINT `matriculacuenta` FOREIGN KEY (`matricula`) REFERENCES `profesional` (`matricula`) ON UPDATE NO ACTION) - 09-12-2014 06:55:33

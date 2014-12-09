@@ -16,6 +16,9 @@ public class Mensaje {
     public static void mostrarMensaje(Component rootPane, String mensaje, String titulo, int tipo){
 
         JOptionPane.showMessageDialog(rootPane, mensaje, titulo, tipo);
+        
+        if(tipo == JOptionPane.ERROR_MESSAGE)
+            Log.write(mensaje);
     
     }
     

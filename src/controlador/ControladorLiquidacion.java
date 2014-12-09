@@ -208,6 +208,8 @@ public class ControladorLiquidacion {
                     detalles.add(detalle);
      
                 }
+            conexion.Cerrar_conexion();
+            
              }catch (SQLException ex) {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -351,6 +353,8 @@ public class ControladorLiquidacion {
             while(resultado.next()){
                     cuotas.add(resultado.getString("nombre"));
                 }
+            conexion.Cerrar_conexion();
+            
              }catch (SQLException ex) {
             Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
         }
