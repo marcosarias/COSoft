@@ -158,7 +158,7 @@ public class ControladorCuentaCorriente {
      public static void obtenerCuotasAdeudadasImporte(ArrayList<CuentaCuotas> cuentacuotas, int matricula, float importe){
     
         try {
-            String consultaSQL = "SELECT * FROM cuentacuotas where idliquidacion is null and id not in (select cuota from condonaciones) and matricula = " + matricula + " and importe <= " + String.valueOf(importe);
+            String consultaSQL = "SELECT * FROM cuentacuotas where idliquidacion is null and idcuota not in (select cuota from condonaciones) and matricula = " + matricula + " and importe <= " + String.valueOf(importe);
             // + Order by mes ? 
             
             Conexion conexion = new Conexion();
