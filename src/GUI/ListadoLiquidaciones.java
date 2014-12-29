@@ -12,7 +12,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -63,8 +71,7 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
                 Point p = me.getPoint();
                 int row = table.rowAtPoint(p);
                 if (me.getClickCount() == 2) {
-                    Liquidacion liquidacion = new Liquidacion();
-                    liquidacion = liquidaciones.get(liquidacionesTable.getSelectedRow());
+                    Liquidacion liquidacion = liquidaciones.get(liquidacionesTable.getSelectedRow());
                     TablaLiquidacion form = new TablaLiquidacion(liquidacion.getIdLiquidacion());
                     form.setVisible(true);
                 }
@@ -214,10 +221,20 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
         jLabel1.setText("Obra Social:");
 
         jComboBox1.setModel(modeloObrasSociales);
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
 
-        jLabel2.setText("Mes:");
+        jLabel2.setText("Mes Recibida:");
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Todos", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        jComboBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox2ItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -232,7 +249,7 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(451, Short.MAX_VALUE))
+                .addContainerGap(408, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,6 +337,45 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
 
     }//GEN-LAST:event_jMenuItemVerLiquidacionActionPerformed
 
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+        int mes = jComboBox2.getSelectedIndex();
+        if (mes == 0)//Todos
+            llenarTodo();
+        else{
+            DateFormat inputDF  = new SimpleDateFormat("dd-MM-yy");
+            Date fechaRecibida = null;
+            ArrayList<Liquidacion> liquidacionesNuevas = new ArrayList<>();
+            liquidaciones.clear();
+            ControladorLiquidacion.getLiquidaciones(liquidaciones);
+            for (Liquidacion liquidacion:liquidaciones){
+                try {
+                    fechaRecibida = inputDF.parse(liquidacion.getFechaRecibida());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(fechaRecibida);
+
+                    int mesRecibida = cal.get(Calendar.MONTH)+1;
+                    if (mesRecibida == mes){
+                        liquidacionesNuevas.add(liquidacion);
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(ListadoLiquidaciones.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            liquidaciones.clear();
+            liquidaciones = liquidacionesNuevas;
+            llenarTodo(liquidaciones);
+        }
+    }//GEN-LAST:event_jComboBox2ItemStateChanged
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        String item = (String) jComboBox1.getSelectedItem();
+        if (item.compareTo("Todas") == 0){
+            llenarTodo();
+        }
+        else
+            llenarTodo(item);
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
@@ -377,5 +433,49 @@ public class ListadoLiquidaciones extends javax.swing.JDialog implements WindowF
         }
         
     }
+
+    private void llenarTodo(String obraSocial) {
+         for(int i = liquidacionesTable.getRowCount() - 1; i >= 0; i--){
         
+            modelo.removeRow(i);
+        
+        }
+        
+        liquidaciones.clear();
+        
+        ControladorLiquidacion.getLiquidacionesObraSocial(liquidaciones,obraSocial);
+        
+        for(Liquidacion liquidacion : liquidaciones){
+            
+            obra = new ObraSocial();
+            obra.setIdObraSocial(liquidacion.getIdObraSocial());
+            ControladorObraSocial.getDatos(obra);
+        
+            String nombreobrasocial = obra.getNombre();
+            String[] data = { liquidacion.getFechaRecibida(), liquidacion.getFechaPago(), nombreobrasocial, liquidacion.getNombre(), liquidacion.getImporte() };
+            modelo.addRow(data);
+        
+        }
+    }
+
+    private void llenarTodo(ArrayList<Liquidacion> liquidaciones) {
+         for(int i = liquidacionesTable.getRowCount() - 1; i >= 0; i--){
+        
+            modelo.removeRow(i);
+        
+        }
+
+        for(Liquidacion liquidacion : liquidaciones){
+            
+            obra = new ObraSocial();
+            obra.setIdObraSocial(liquidacion.getIdObraSocial());
+            ControladorObraSocial.getDatos(obra);
+        
+            String nombreobrasocial = obra.getNombre();
+            String[] data = { liquidacion.getFechaRecibida(), liquidacion.getFechaPago(), nombreobrasocial, liquidacion.getNombre(), liquidacion.getImporte() };
+            modelo.addRow(data);
+        
+        }
+    }
+       
 }

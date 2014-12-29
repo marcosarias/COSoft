@@ -36,7 +36,6 @@ public class GenerarCuotas extends javax.swing.JDialog {
         setResizable(false);
         
         llenarCombos();
-        Calendar calendar = Calendar.getInstance();
         jTextField1.setText(Fecha.getFechaActual());
         
     }
@@ -128,13 +127,13 @@ public class GenerarCuotas extends javax.swing.JDialog {
                             .addComponent(jLabel2))
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox2, 0, 196, Short.MAX_VALUE)
                             .addComponent(jSpinner1))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(82, 82, 82)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addGap(86, 86, 86))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,8 +183,6 @@ public class GenerarCuotas extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;

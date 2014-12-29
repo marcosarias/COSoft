@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import controlador.ControladorLocalidad;
 import controlador.ControladorMaterial;
 import controlador.ControladorObraSocial;
 import controlador.ControladorProfesional;
@@ -13,10 +14,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import modelo.Localidad;
 import modelo.ObraSocial;
 import modelo.Profesional;
 import utilidades.Mensaje;
@@ -33,6 +37,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     Boolean deboRefrescar;
     
     ArrayList<Profesional> profesionales;
+    DefaultComboBoxModel modeloLocalidades = new DefaultComboBoxModel();;
+    ArrayList<Localidad> localidades = new ArrayList<>();
     
     /**
      * Creates new form ListadoProfesionales
@@ -42,6 +48,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         setModal(true);
         setLocationRelativeTo(null);
         setResizable(false);
+        
         
         modelo = (DefaultTableModel) jTable1.getModel();
         modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
@@ -91,6 +98,7 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         
         addWindowFocusListener(this);
         
+        llenarLocalidades();
         llenarTodo();
         
     }
@@ -123,6 +131,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         jPanel2 = new javax.swing.JPanel();
         BuscarProfesionalTextField = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
+        localidadComboBox = new javax.swing.JComboBox();
+        localidadLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -252,6 +262,15 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
             }
         });
 
+        localidadComboBox.setModel(modeloLocalidades);
+        localidadComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                localidadComboBoxItemStateChanged(evt);
+            }
+        });
+
+        localidadLabel.setText("Localidad:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -261,6 +280,10 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                 .addComponent(BuscarProfesionalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
+                .addGap(18, 18, 18)
+                .addComponent(localidadLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(localidadComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -269,7 +292,10 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
                 .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BuscarProfesionalTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(localidadLabel)
+                        .addComponent(localidadComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -307,15 +333,11 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 907, Short.MAX_VALUE))))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 907, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(253, 253, 253)
@@ -429,6 +451,17 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         
     }//GEN-LAST:event_jMenuItemCuotasPendientesActionPerformed
 
+    private void localidadComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_localidadComboBoxItemStateChanged
+        int index = localidadComboBox.getSelectedIndex();
+        if (index == 0){
+            llenarTodo();
+        }
+        else{
+            Localidad localidad = localidades.get(index-1);
+            llenarTodo(localidad.getIdlocalidad());
+        } 
+    }//GEN-LAST:event_localidadComboBoxItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BuscarProfesionalTextField;
     private javax.swing.JButton jButton1;
@@ -451,6 +484,8 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JComboBox localidadComboBox;
+    private javax.swing.JLabel localidadLabel;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -516,6 +551,40 @@ public class ListadoProfesionales extends javax.swing.JDialog implements WindowF
         
         }
         
+    }
+
+    private void llenarTodo(int idLocalidad) {
+
+        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
+        
+            modelo.removeRow(i);
+        
+        }
+        
+        profesionales.clear();
+        
+        ControladorProfesional.getProfesionalesBusqueda(profesionales,idLocalidad);
+        
+        for(Profesional profesional : profesionales){
+        
+            String activo;
+            if(profesional.getActivo() == 1)
+                activo = "Si";
+            else activo = "No";
+            String[] data = { String.valueOf(profesional.getMatricula()), profesional.getNombre(), profesional.getDireccion(), profesional.getTelefonos(), profesional.getCbu(), profesional.getBanco(), profesional.getLocalidad(), activo };
+            modelo.addRow(data);
+        
+        }
+        
+    }
+    private void llenarLocalidades() {
+        localidades.clear();
+        ControladorLocalidad.getLocalidades(localidades);
+        modeloLocalidades.addElement("Todas");
+        for(Localidad localidad : localidades){
+            modeloLocalidades.addElement(localidad.getNombre());
+        }
+    
     }
         
 }

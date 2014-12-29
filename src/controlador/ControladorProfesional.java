@@ -364,5 +364,35 @@ public class ControladorProfesional {
         return resultado;
         
     }
+
+    public static void getProfesionalesBusqueda(ArrayList<Profesional> profesionales, int idLocalidad) {
+        try {
+            String consultaSQL = "SELECT * FROM vistaprofesionales WHERE idlocalidad = "+idLocalidad;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    Profesional profesional = new Profesional();
+                    profesional.setMatricula(resultado.getInt("matricula"));
+                    profesional.setNombre(resultado.getString("nombre"));
+                    profesional.setDireccion(resultado.getString("direccion"));
+                    profesional.setTelefonos(resultado.getString("telefonos"));
+                    profesional.setCbu(resultado.getString("cbu"));
+                    profesional.setBanco(resultado.getString("banco"));
+                    profesional.setLocalidad(resultado.getString("localidad"));
+                    profesional.setActivo(resultado.getInt("activo"));
+                    profesionales.add(profesional);
+                    
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
 }

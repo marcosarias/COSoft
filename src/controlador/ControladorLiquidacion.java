@@ -361,5 +361,34 @@ public class ControladorLiquidacion {
         
         return cuotas;
     }
+
+    public static void getLiquidacionesObraSocial(ArrayList<Liquidacion> liquidaciones, String obraSocial) {
+        int idObraSocial = ControladorObraSocial.getIdObraSocial(obraSocial);
+        try {
+            String consultaSQL = "SELECT * FROM liquidacion WHERE idobrasocial = "+idObraSocial;
+            
+            Conexion conexion = new Conexion();
+            conexion.Conectar();
+            ResultSet resultado = conexion.ejecutarConsultaSQL(consultaSQL);
+            
+            while(resultado.next()){
+                
+                    Liquidacion liquidacion = new Liquidacion();
+                    liquidacion.setIdLiquidacion(resultado.getInt("idliquidacion"));
+                    liquidacion.setIdObraSocial(resultado.getInt("idobrasocial"));
+                    liquidacion.setFechaPago(resultado.getString("fechapago"));
+                    liquidacion.setFechaRecibida(resultado.getString("fecharecibida"));
+                    liquidacion.setImporte(resultado.getString("importe"));
+                    liquidacion.setNombre(resultado.getString("nombreliquidacion"));
+                    liquidaciones.add(liquidacion);
+     
+                }
+            
+            conexion.Cerrar_conexion();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
 

@@ -158,14 +158,14 @@ public class FormularioArancel extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(FormularioArancelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 105, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(82, 82, 82)
+                .addGap(95, 95, 95)
                 .addComponent(jButton1)
-                .addGap(58, 58, 58)
+                .addGap(72, 72, 72)
                 .addComponent(jButton2)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,8 +262,6 @@ public class FormularioArancel extends javax.swing.JDialog {
     private javax.swing.JComboBox FormularioArancelObra;
     private javax.swing.JLabel FormularioArancelTitulo;
     private javax.swing.JTextField FormularioArancelValor;
-    private javax.swing.JButton cancelarButton;
-    private javax.swing.JButton cancelarButton1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;

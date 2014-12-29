@@ -70,7 +70,8 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         ObraSocial obrasocial = new ObraSocial();
         obrasocial.setIdObraSocial(liquidacion.getIdObraSocial());
         ControladorObraSocial.getDatos(obrasocial);
-        this.nombreObraSocial.setText(obrasocial.getNombre());
+		this.jLabelTitulo.setText(jLabelTitulo.getText() + " " + obrasocial.getNombre());
+     //   this.nombreObraSocial.setText(obrasocial.getNombre());
         this.importe.setText(liquidacion.getImporte());
         this.fechaPago.setText(liquidacion.getFechaPago());
         this.fechaRecibida.setText(liquidacion.getFechaRecibida());
@@ -91,11 +92,11 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                     
                     int i = tabla.getSelectedRow();
                     int matricula = (int) tabla.getValueAt(i, 1);
-                    float valor = Float.parseFloat(tabla.getValueAt(i, tabla.getColumnCount()-1).toString()); //TODO: esto no va a funcionar
+                    float valor = Float.parseFloat(tabla.getValueAt(i, tabla.getColumnCount()-1).toString()); 
                     System.out.println(matricula + " " + valor);
                     ListadoLiquidacionProfesional form = new ListadoLiquidacionProfesional(matricula, valor, liquidacion.getIdLiquidacion(),i);
                     form.setVisible(true);
-                    
+ 
                 }
             }
             
@@ -122,7 +123,7 @@ public class TablaLiquidacion extends javax.swing.JDialog {
             
         });
         
-        ArrayList<String> columnas = ControladorLiquidacion.getCuotas(idLiquidacion);
+        columnas = ControladorLiquidacion.getCuotas(idLiquidacion);
         
         if (columnas.isEmpty()){
             // Armo un arraylist con los nombres de las cuotas vigentes
@@ -130,8 +131,10 @@ public class TablaLiquidacion extends javax.swing.JDialog {
             //Llena la tabla
             llenarTodo(true);
         }
-        else
+        else{
+            columnas.add("Neto a Pagar");
             llenarTodo(false);
+        }
     }
 
     /**
@@ -147,7 +150,7 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         jMenuItem1 = new javax.swing.JMenuItem();
         jFileChooser1 = new javax.swing.JFileChooser();
         jLabelTitulo = new javax.swing.JLabel();
-        nombreObraSocial = new javax.swing.JLabel();
+      //  nombreObraSocial = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         Exportar = new javax.swing.JButton();
         Eliminar = new javax.swing.JButton();
@@ -173,10 +176,11 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
 
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+		jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("Liquidación Obra Social:");
 
-        nombreObraSocial.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        nombreObraSocial.setText("nombre Obra Social");
+        //nombreObraSocial.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        //nombreObraSocial.setText("nombre Obra Social");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -287,6 +291,7 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         });
         tabla.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
         tabla.setPreferredSize(new java.awt.Dimension(1500, 1300));
+        tabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tabla);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -294,26 +299,27 @@ public class TablaLiquidacion extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(250, 250, 250)
-                        .addComponent(jLabelTitulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nombreObraSocial))
-                    .addGroup(layout.createSequentialGroup()
+                // .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    // .addGroup(layout.createSequentialGroup()
+                        // .addGap(250, 250, 250)
+                        // .addComponent(jLabelTitulo)
+                        // .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        // .addComponent(nombreObraSocial))
+                    // .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)//)))
+							.addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              // .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelTitulo)
-                    .addComponent(nombreObraSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+              //      .addComponent(nombreObraSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -346,8 +352,9 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                 
                 Exportar.setText("Exportando");
                 Exportar.setEnabled(false);
-                Excel.writeFile(tabla, file, jLabelTitulo.getText() + nombreObraSocial.getText(), liquidacion.getNombre());
-                Exportar.setText("Exportar");
+                //Excel.writeFile(tabla, file, jLabelTitulo.getText() + nombreObraSocial.getText(), liquidacion.getNombre());
+				Excel.writeFile(tabla, file, jLabelTitulo.getText(), liquidacion.getNombre());
+				Exportar.setText("Exportar");
                 Exportar.setEnabled(true);
                 JOptionPane.showMessageDialog(rootPane, file.getName() + " guardado con éxito.", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -370,7 +377,7 @@ public class TablaLiquidacion extends javax.swing.JDialog {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         int i = tabla.getSelectedRow();
         int matricula = (int) tabla.getValueAt(i, 1);
-        float valor = Float.parseFloat(tabla.getValueAt(i, tabla.getColumnCount()-1).toString()); //TODO: esto no va a funcionar
+        float valor = Float.parseFloat(tabla.getValueAt(i, tabla.getColumnCount()-1).toString()); 
         System.out.println(matricula + " " + valor);
         ListadoLiquidacionProfesional form = new ListadoLiquidacionProfesional(matricula, valor, liquidacion.getIdLiquidacion(),i);
         form.setVisible(true);
@@ -393,15 +400,15 @@ public class TablaLiquidacion extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel nombreObraSocial;
+  //  private javax.swing.JLabel nombreObraSocial;
     public static javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 
     
     /**
      * Llena el vector con el que se creara el modeloLiquidacion de la tabla de liquidación
- agrega las columnas definidas por defecto (Apellido y nombre, matricula, etc)
- y agrega una columna por cada nombre de cuota distinto
+       agrega las columnas definidas por defecto (Apellido y nombre, matricula, etc)
+       y agrega una columna por cada nombre de cuota distinto
      * 
      */  
  private void llenarNombresColumnas() {
@@ -425,6 +432,7 @@ public class TablaLiquidacion extends javax.swing.JDialog {
     /**
      * Llena la tabla de la liquidación recorriendo los detalles de la misma
      * y recorriendo los conceptos de cada detalle.
+     * @param Boolean nueva
      */
     private void llenarTodo(Boolean nueva) {
         
@@ -461,31 +469,38 @@ public class TablaLiquidacion extends javax.swing.JDialog {
                 modeloLiquidacion.addColumn(columna,valores );
             }
            
+           //Si no es nueva debo llenar las columnas correspondientes a las cuotas
            if (!nueva){
-               ArrayList<CuentaCuotas> cuentacuotas = new ArrayList<>();
+               //Recorro cada fila de la tabla, cada fila equivale a un profesional 
                for (int fila=0;fila<rowCount;fila++){
-                   for (DetalleLiquidacion detalle: detalles){
-                        ControladorCuentaCorriente.obtenerCuotasLiquidacion(cuentacuotas, detalle.getMatricula(), detalle.getIdLiquidacion());
-                        for (int columna=4;columna<modeloLiquidacion.getColumnCount();columna++){
-                            String nombreColumna = modeloLiquidacion.getColumnName(columna);
-                            Float valorColumna = 0f;
-                            for (CuentaCuotas cuenta:cuentacuotas){
-                                if(ControladorTipoCuota.getNombre(cuenta.getIdCuota()).matches(nombreColumna)){
-                                    valorColumna = valorColumna + cuenta.getImporte();
-                                }
+                    int matricula = (int) tabla.getValueAt(fila, 1);
+                    ArrayList<CuentaCuotas> cuentacuotas = new ArrayList<>();
+                    ControladorCuentaCorriente.obtenerCuotasLiquidacion(cuentacuotas, matricula, liquidacion.getIdLiquidacion());
+                    //Recorro las columnas correespondientes a las cuotas de la liquidacion
+                    for (int columna=4;columna<modeloLiquidacion.getColumnCount()-1;columna++){
+                        String nombreColumna = modeloLiquidacion.getColumnName(columna);
+                        Float valorColumna = 0f;
+                        //Recorro el cuentacuotas sumando los valores correspondientes a la cuota de la columna
+                        for (CuentaCuotas cuenta:cuentacuotas){
+                            if(cuenta.getMatricula() == matricula && ControladorTipoCuota.getNombre(cuenta.getIdCuota()).matches(nombreColumna)){
+                                valorColumna = valorColumna + cuenta.getImporte();
                             }
-                            modeloLiquidacion.setValueAt(valorColumna, fila, columna);
                         }
+                        modeloLiquidacion.setValueAt(valorColumna, fila, columna);
                     }
-               }
-           }
+                }
+            }
+           //Actualizo el Neto con los valores de cuotas cargados
            actualizarNeto();
         }
 
 
     }    
 
-
+    /**
+     * Actualiza la última columna de la tabla, correspondiente al Neto a Pagar, restandole
+     * al importe de cada profesional las cuotas que le fueron descontadas.
+     */
     private void actualizarNeto() {
         for(int i = tabla.getRowCount() - 1; i >= 0; i--){
             

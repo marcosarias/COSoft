@@ -27,6 +27,7 @@ import modelo.Liquidacion;
 import modelo.Material;
 import modelo.ObraSocial;
 import modelo.Profesional;
+import utilidades.Fecha;
 import utilidades.Mensaje;
 
 /**
@@ -59,6 +60,8 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
         modelo = (DefaultTableModel) jTable1.getModel();
         modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
         
+		fechaPagoTextField.setText(Fecha.getFechaActual());
+        fechaRecibidaTextField.setText(Fecha.getFechaActual());
         llenarObrasSociales();
         
         llenarTodo();
@@ -395,7 +398,7 @@ public class FormularioLiquidacion extends javax.swing.JDialog {
                 
             }
             else{
-                JOptionPane.showMessageDialog(null, "El importe total debe coincidir con la suma de los importes de los profesionales.");
+                JOptionPane.showMessageDialog(null, "El importe total debe ser mayor a cero");
             }                 
         }
         else{

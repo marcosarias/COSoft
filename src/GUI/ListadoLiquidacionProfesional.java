@@ -42,24 +42,7 @@ public class ListadoLiquidacionProfesional extends javax.swing.JDialog {
     private DefaultTableModel modelo = new DefaultTableModel();
     private DefaultTableColumnModel modeloColumnas = new DefaultTableColumnModel();
     
-    /**
-     * Creates new form ListadoObrasSocialesProfesional
-     */
-    /*
-    public ListadoLiquidacionProfesional(int matricula) {
-        initComponents();
-        this.matricula = matricula;
-        setModal(true);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        
-        modelo = (DefaultTableModel) jTable1.getModel();
-        modeloColumnas = (DefaultTableColumnModel) jTable1.getColumnModel();
-        
-        llenarTodo();
-        
-    }
-*/
+
     ListadoLiquidacionProfesional(int matricula, float importe, int id, int nRow ) {
        
         initComponents();
@@ -81,9 +64,7 @@ public class ListadoLiquidacionProfesional extends javax.swing.JDialog {
         cuentacuotasactual = new ArrayList<>();
         ControladorCuentaCorriente.obtenerCuotasAdeudadasImporte(cuentacuotas, matricula, importe);
         ControladorCuentaCorriente.obtenerCuotasLiquidacion(cuentacuotasactual, matricula, idLiquidacion);
-          
-    //    cuentacuota = cuentacuotas;
-    //    Collections.copy(cuentacuotaactual, cuentacuotas);
+
         
         modelo = (DefaultTableModel) this.jTable1.getModel();
         // Vacio la tabla
@@ -116,26 +97,6 @@ public class ListadoLiquidacionProfesional extends javax.swing.JDialog {
     }
 
 
-    
-    /*
-    private void llenarTodo() {
-                
-        ids = ControladorProfesional.getObrasProfesional(matricula);
-        obras = new ArrayList<>();
-        ControladorObraSocial.getObrasSociales(obras);
-        
-        for(ObraSocial obra : obras){
-        
-            Boolean esta = false;
-            if(ids.contains(obra.getIdObraSocial()))
-                esta = true;
-            
-            Object[] data = { obra.getNombre(), esta };
-            modelo.addRow(data);
-        
-        }
-        
-    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -262,16 +223,23 @@ public class ListadoLiquidacionProfesional extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabelTitulo)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
+                        // .addGap(82, 82, 82)
+                        // .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            // .addComponent(jLabelTitulo)
+                            // .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    // .addGroup(layout.createSequentialGroup()
                         .addGap(113, 113, 113)
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)))
-                .addContainerGap(170, Short.MAX_VALUE))
+						                        .addGap(50, 50, 50)
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(142, 142, 142)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1))))
+                        // .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        // .addComponent(jButton2)))
+                .addContainerGap(161, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -343,43 +311,6 @@ public class ListadoLiquidacionProfesional extends javax.swing.JDialog {
              Mensaje.mostrarMensaje(rootPane, "El saldo no puede ser negativo", "Error", JOptionPane.ERROR_MESSAGE);
         }
             
-//        ArrayList<Integer> idsNuevos = new ArrayList<>();
-//        
-//        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
-//        
-//            Boolean esta = (Boolean) modelo.getValueAt(i, 3);
-//            if(esta)
-//                idsNuevos.add(tipoCuotas.get(i).getIdCuota());
-//        
-//        }
-//        
-//        String resultado = ControladorProfesional.actualizarCuotas(idsNuevos, matricula);
-//        if (resultado.equals("")) //No hubo error
-//        {
-//            Mensaje.mostrarMensaje(rootPane, "Operación realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
-//        } else {
-//            Mensaje.mostrarMensaje(rootPane, "Error al realizar la operación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//
-//        dispose();
-//        
-//        ArrayList<Integer> idsNuevos = new ArrayList<>();
-//        for(int i = jTable1.getRowCount() - 1; i >= 0; i--){
-//
-//            Boolean esta = (Boolean) modelo.getValueAt(i, 1);
-//            if(esta)
-//                idsNuevos.add(cuentacuotaactual.get(i).getIdCuentaCuotas());
-//
-//        }
-
-      /*  String resultado = ControladorProfesional.actualizarObras(idsNuevos, matricula);
-        if (resultado.equals("")) //No hubo error
-        {
-            Mensaje.mostrarMensaje(rootPane, "Operación realizada con éxito", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            Mensaje.mostrarMensaje(rootPane, "Error al realizar la operación:\n" + resultado, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-*/
         dispose();
 
     }//GEN-LAST:event_jButton1ActionPerformed

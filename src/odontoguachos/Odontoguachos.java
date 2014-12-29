@@ -27,7 +27,7 @@ public class Odontoguachos {
         //mf.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         mf.setLocationRelativeTo(null);
         mf.setResizable(true);
-        mf.setTitle("Centro Odontológico del Prtido de la Costa");
+        mf.setTitle("Círculo Odontológico del Partido de la Costa");
         
     }
     
